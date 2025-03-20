@@ -30,7 +30,6 @@ body {
 }
 
 header {
-  position: fixed;
   width: 100%;
   top: 0;
   right: 0;
@@ -38,7 +37,7 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 100px;
+  padding: 2px 20px;
   background: var(--main-color);
   transition: 0.5s linear;
 }
@@ -90,3 +89,106 @@ header {
     text-decoration: none;
     color: var(--text-color);
   }
+
+  .carousel {
+    max-width: auto;
+    margin: 0 auto; 
+  }
+  
+  .carousel-item img {
+    height: 500px; 
+    object-fit: cover;
+  }
+
+  .carousel-control-prev,
+.carousel-control-next {
+  display: none;
+}
+
+.carousel-indicators button {
+    background-color: var(--main-color);
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+  }
+  
+  .carousel-indicators .active {
+    background-color: var(--main-color);
+
+  }
+
+  .carousel-caption {
+    position: absolute;
+    top: 50%;
+    left: 10%; 
+    text-align: left; 
+    padding: 15px;
+    border-radius: 5px;
+    max-width: 50%;
+  }
+  
+  .carousel-caption h5 {
+    font-size: 2rem; 
+    font-weight: bold;
+    color: var(--text-color);
+  }
+  
+  .carousel-caption p {
+    font-size: 1.2rem; 
+    color: var(--text-color);
+  }
+
+  .carousel-item {
+    position: relative;
+  }
+  
+  .carousel-item img {
+    width: 100%;
+    height: 500px;
+    object-fit: cover;
+    filter: blur(2px) brightness(50%); /* Aplica desfoque pequeno e escurece a imagem */
+  }
+
+  /*serviço */
+
+  .service_section .box {
+    display: flex;
+    margin-top: 50px;
+    background-color: #111111;
+    padding: 20px;
+    border-radius: 5px;
+  }
+  .service_section .box h3{
+    font-weight: bold;
+  }
+
+  .container {
+    color: var(--text-color); /* Altera a cor do texto para branco */
+  }
+  
+  .container h4 {
+    color: var(--text-color);
+    font-weight:bold; /* Coloca o <h2> em negrito */
+  }
+
+  .service_section .box .img-box {
+    display: flex;
+    justify-content: flex-start; /* Align left */
+    align-items: center;
+    width: 80px; /* Fixed width */
+    height: 80px; /* Fixed height */
+    margin-right: 25px;
+    overflow: hidden; /* Prevents overflow */
+}
+
+.service_section .box .img-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures uniform size without distortion */
+}
+
+
+  
+
+
+  
+  
+  
