@@ -43,7 +43,8 @@ header {
 }
 
 .logo img {
-  width: 100px;
+  width: 200px;
+  padding: 15px;
 }
 
 .navbar {
@@ -144,7 +145,7 @@ header {
     width: 100%;
     height: 500px;
     object-fit: cover;
-    filter: blur(2px) brightness(50%); /* Aplica desfoque pequeno e escurece a imagem */
+    filter: blur(2px) brightness(50%);
   }
 
   /*serviço */
@@ -161,28 +162,28 @@ header {
   }
 
   .container {
-    color: var(--text-color); /* Altera a cor do texto para branco */
+    color: var(--text-color);
   }
   
   .container h4 {
     color: var(--text-color);
-    font-weight:bold; /* Coloca o <h2> em negrito */
+    font-weight:bold;
   }
 
   .service_section .box .img-box {
     display: flex;
-    justify-content: flex-start; /* Align left */
+    justify-content: flex-start;
     align-items: center;
-    width: 80px; /* Fixed width */
-    height: 80px; /* Fixed height */
+    width: 80px;
+    height: 80px;
     margin-right: 25px;
-    overflow: hidden; /* Prevents overflow */
+    overflow: hidden;
 }
 
 .service_section .box .img-box img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Ensures uniform size without distortion */
+    object-fit: cover;
 }
 
 
