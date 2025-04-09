@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ESTransportado</title>
+
+  <!-- BOOTSTRAP 5 CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+  <!-- CSS Personalizado -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- BOXICONS -->
+  <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
+
+  <style>
+  
+
+
+    
+
+    .wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: calc(100vh - 300px); 
+      padding: 50px 20px;
+    }
+
+    .proposta-container {
+      background-color: #111111;
+      border-radius: 15px;
+      padding: 30px;
+      max-width: 600px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .proposta-container h2 {
+      color: #c2ff22;
+      margin-bottom: 10px;
+    }
+
+    .proposta-container p {
+      margin-bottom: 30px;
+      color: #ccc;
+    }
+
+    .form-group {
+      text-align: left;
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      color: #c2ff22;
+      font-weight: 500;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      background-color: #2a2a2a;
+      color: white;
+    }
+
+    .form-group input::placeholder {
+      color: #aaa;
+    }
+
+    .btn-enviar {
+      background-color: #c2ff22;
+      color: black;
+      padding: 12px 25px;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: background-color 0.3s;
+    }
+
+    .btn-enviar:hover {
+      background-color: #b6f500;
+    }
+
+    .trip-type {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .trip-type button {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      cursor: pointer;
+      background: #333;
+      color: white;
+      border-radius: 5px;
+    }
+    .trip-type button.active {
+      background: #c2ff22;
+      color: black;
+    }
+
+    
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <a href="pagina_inicial.html" class="logo">
+      <img src="imagens/logo.png" alt="ESTransportado">
+    </a>
+  </header>
+
+  <div class="wrapper">
+    <div class="proposta-container">
+      <h2>Criar Proposta de Transporte</h2>
+      <p>Preenche os dados de uma viagem que achas que deveriamos adicionar e ainda não esteja disponivel!</p>
+
+      <form>
+        <div class="form-group">
+          <label for="origem">De</label>
+          <input type="text" id="origem" name="origem" placeholder="Ex: Lisboa" required>
+        </div>
+
+        <div class="form-group">
+          <label for="destino">Para</label>
+          <input type="text" id="destino" name="destino" placeholder="Ex: Castelo Branco" required>
+        </div>
+
+        <div class="trip-type">
+            <button class="active">Publico</button>
+            <button>Privado</button>
+        </div>
+
+        <div class="form-group">
+          <label for="data">Data</label>
+          <input type="date" id="data" name="data" required>
+        </div>
+
+        <div class="form-group">
+          <label for="hora">Hora</label>
+          <input type="time" id="hora" name="hora" required>
+        </div>
+
+        <div class="form-group">
+          <label for="lugares">Nº de Lugares Disponíveis</label>
+          <input type="number" id="lugares" name="lugares" min="1" max="50" placeholder="Ex: 4" required>
+        </div>
+
+        <div class="form-group">
+          <label for="preco">Preço por pessoa (€)</label>
+          <input type="number" id="preco" name="preco" step="0.01" placeholder="Ex: 5.00" required>
+        </div>
+
+        <a href="#" class="btn btn-primary" id="btn-lermais">Submeter proposta</a>
+      </form>
+    </div>
+  </div>
+
+  <footer class="rodape">
+    <div class="container">
+      <div class="row">
+        <!-- Sobre -->
+        <div class="col-md-4">
+          <div class="rodape-sobre">
+            <h3>Sobre a <span>EST</span>ransportado</h3>
+            <p>A ESTransportado oferece soluções de transporte eficientes e acessíveis para estudantes, ligando-os com as suas instituições de ensino.</p>
+          </div>
+        </div>
+
+        <!-- Contacto -->
+        <div class="col-md-4">
+          <div class="rodape-contactos">
+            <h3>Contacte-nos</h3>
+            <ul>
+              <li><strong>Email:</strong> info@estransportado.pt</li>
+              <li><strong>Telefone:</strong> +351 123 456 789</li>
+              <li><strong>Endereço:</strong> Rua da Universidade, 1000 - Castelo Branco, Portugal</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="rodape-direitos">
+        <p>&copy; 2025 ESTransportado. Todos os direitos reservados.</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
