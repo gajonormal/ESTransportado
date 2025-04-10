@@ -245,6 +245,25 @@ header {
   
 }
 
+#btn-eliminar{
+  padding: 10px 15px;
+  margin-top: 15px;
+  border-radius: 0.3rem;
+  background-color: #ff2f2f;
+  color: white;
+  font-weight: 600;
+  text-decoration: none;
+  border: none;
+  
+}
+
+#btn-eliminar:hover {
+  background: #d62b2b;
+  transition: 0.2s all;
+  text-decoration: none;
+  
+}
+
 /*Contactar*/
 
   .contactos {
