@@ -87,7 +87,6 @@
     
     .btn-pagar {
         display: block;
-        
         width: 100%; /* Ajusta a largura ao conteúdo */
         padding: 10px 20px;
         background: #bdf13b;
@@ -109,33 +108,52 @@
         margin-left: auto;
     }
 
-.metodo-pagamento {
-    display: flex;
-    align-items: center;
-    background: #2c2c2c;
-    padding: 10px;
-    margin: 5px 0;
-    border-radius: 8px;
-    border: 3px solid #3c3c3c;
-}
+    .metodo-pagamento {
+        display: flex;
+        align-items: center;
+        background: #2c2c2c;
+        padding: 10px;
+        margin: 5px 0;
+        border-radius: 8px;
+        border: 3px solid #3c3c3c;
+    }
 
-.metodo-pagamento input {
-    margin-right: 10px;
-}
+    .metodo-pagamento input {
+        margin-right: 10px;
+    }
 
-.metodo-pagamento svg {
-    height: 20px;
-    margin-right: 10px; 
-}
+    .metodo-pagamento svg {
+        height: 20px;
+        margin-right: 10px; 
+    }
 
-.wrapper {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            width: 100%;
-            max-width: 1200px;
-            margin: auto;
-        }
+    .wrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        width: 100%;
+        max-width: 1200px;
+        margin: auto;
+    }
+
+    .btn-avaliacoes {
+        display: block;
+        margin-top: 10px;
+        padding: 10px 20px;
+        background: #bdf13b;
+        color: #2c2c2c;
+        text-align: center;
+        border-radius: 15px;
+        text-decoration: none;
+        font-weight: bold;
+        border: none;
+        
+    }
+
+    .btn-avaliacoes:hover{
+        background: var(--second-color);
+        transition: 0.2s all;
+    }
 
 </style>
 </head>
@@ -210,6 +228,15 @@
                 <h5>A tua reserva</h5>
                 <p>Destino: Porto - Lisboa</p>
                 <p>Horário: 16:45 - 20:00</p>
+            </div>
+            <div class="box">
+                <h5>Condutor</h5>
+                <p>Gonçalo</p>
+                <div class="avaliacao">
+                    <span class="estrelas">☆</span>
+                    <span class="media">4.7 / 5</span>
+                  </div>
+                  <a href="avaliacoes-condutor.html" class="btn-avaliacoes">Ver avaliações</a>
             </div>
             <div class="box">
                 <h5>Preço</h5>

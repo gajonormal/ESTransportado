@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ESTransportado</title>
+
+  <!-- BOOTSTRAP 5 CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+  <!-- CSS Personalizado -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- BOXICONS -->
+  <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
+
+  <style>
+    .container {
+      max-width: 800px;
+      margin: 30px auto;
+      background: #111;
+      padding: 20px;
+      border-radius: 10px;
+    }
+    .form-section, .results-section {
+      margin-bottom: 30px;
+    }
+    .trip-type {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .trip-type button {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      cursor: pointer;
+      background: #333;
+      color: white;
+      border-radius: 5px;
+    }
+    .trip-type button.active {
+      background: #c2ff22;
+      color: black;
+    }
+    .form-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .form-group {
+      flex: 1;
+      min-width: 150px;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      background: #333;
+      color: white;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    
+    .viagem {
+      background: #222;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+    .viagem strong {
+      color: #c2ff22;
+    }
+    .viagem button {
+      margin-top: 10px;
+      padding: 10px;
+      background: #c2ff22;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+.proposta-viagem {
+  background: #111;
+  border: 2px dashed #c2ff22;
+  text-align: center;
+  margin: 20px auto 0 auto;
+  margin-bottom: 20px;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 800px;
+}
+
+.proposta-viagem p {
+  color: white;
+  margin: 10px 0;
+  font-size: 1rem;
+}
+
+.proposta-viagem p strong {
+  color: #c2ff22;
+  font-size: 1.1rem;
+}
+
+.proposta-viagem button {
+  background: #c2ff22;
+  color: black;
+  font-weight: bold;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-top: 15px;
+}
+
+
+    
+.box h5 {
+    background: #bdf13b;
+    font-weight: bold;
+    color:#111111;
+    padding: 10px;
+    border-radius: 20px;
+    display: inline-block;
+}
+
+
+  </style>
+</head>
+<body>
+    <header>
+        <a href="pagina_inicial.html" class="logo">
+          <img src="imagens/logo.png" alt="ESTransportado">
+        </a>
+      </header>
+  <div class="container">
+
+    <div class="box">
+        <h5>Condutor</h5>
+        <p>Gonçalo Nunes</p>
+    </div>
+  </div>
+  <div class="container">
+        <div class="results-section">
+            <div class="viagem">
+              <div class="text-warning fs-5 mb-2">★★★★★</div>
+              <p>Excelente condutor! Muito educado e a viagem foi segura.</p>
+              <p>João P.</p>
+              <small>10/04/2025</small>
+            </div>
+          
+            <div class="viagem">
+              <div class="text-warning fs-5 mb-2">★★★☆☆</div>
+              <p>Boa viagem, mas chegou um pouco atrasado.</p>
+              <p>Rita A.</p>
+              <small>08/04/2025</small>
+            </div>
+          
+            <div class="viagem">
+              <div class="text-warning fs-5 mb-2">★★★★☆</div>
+              <p>Muito simpático, recomendo!</p>
+              <p>Anónimo</p>
+              <small>02/04/2025</small>
+            </div>
+          
+            <div class="viagem">
+              <div class="text-warning fs-5 mb-2">★★★☆☆</div>
+              <p>Demorou a chegar, mas foi prestável.</p>
+              <p>Carlos T.</p>
+              <small>30/03/2025</small>
+            </div>
+          
+            <div class="viagem">
+              <div class="text-warning fs-5 mb-2">★★★★★</div>
+              <p>Serviço 5 estrelas! Voltaria a viajar com este condutor sem dúvida.</p>
+              <p>Beatriz M.</p>
+              <small>25/03/2025</small>
+            </div>
+          </div>
+  </div>
+  
+</body>
+<!-- Rodapé -->
+<footer class="rodape">
+    <div class="container">
+      <div class="row">
+        <!-- Sobre -->
+        <div class="col-md-4">
+          <div class="rodape-sobre">
+            <h3>Sobre a <span>EST</span>ransportado</h3>
+            <p>A ESTransportado oferece soluções de transporte eficientes e acessíveis para estudantes, ligando-os com as suas instituições de ensino.</p>
+          </div>
+        </div>
+        
+        <!-- Contacto -->
+        <div class="col-md-4">
+          <div class="rodape-contactos">
+            <h3>Contacte-nos</h3>
+            <ul>
+              <li><strong>Email:</strong> info@estransportado.pt</li>
+              <li><strong>Telefone:</strong> +351 123 456 789</li>
+              <li><strong>Endereço:</strong> Rua da Universidade, 1000 - Castelo Branco, Portugal</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="rodape-direitos">
+        <p>&copy; 2025 ESTransportado. Todos os direitos reservados.</p>
+      </div>
+    </div>
+  </footer>
+</html>
