@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ESTransportado</title>
+
+  <!-- BOOTSTRAP 5 CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+  <!-- CSS Personalizado -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- BOXICONS -->
+  <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
+
+  <style>
+    .container {
+      max-width: 800px;
+      margin: 30px auto;
+      background: #111;
+      padding: 20px;
+      border-radius: 10px;
+    }
+
+    .container h1 {
+      text-align: center;
+    }
+    
+    .viagem {
+      background: #222;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+    .viagem strong {
+      color: #c2ff22;
+    }
+    .viagem button {
+      margin-top: 10px;
+      padding: 10px;
+      background: #c2ff22;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+  </style>
+</head>
+<body>
+    <header>
+        <a href="pagina_inicial.html" class="logo">
+          <img src="imagens/logo.png" alt="ESTransportado">
+        </a>
+      </header>
+  <div class="container">
+      <h1>As minhas reservas</h1>
+  </div>
+  <div class="container">
+    <a href="#" class="btn btn-primary" id="btn-lermais">Filtrar</a>
+
+    <div class="results-section">
+      <div class="viagem">
+        <p><strong>17:30</strong> - Porto (TIC - Campanhã) → <strong>20:45</strong> - Lisboa (Oriente)</p>
+        <p>Duração: 3:15h | Preço: €10,49</p>
+        <a href="Editar-reserva.html" class="btn btn-primary" id="btn-lermais">Editar</a>
+        <a href="Cancelar-reserva.html" class="btn btn-primary" id="btn-lermais">Cancelar reserva</a>
+      </div>
+
+      <div class="viagem">
+        <p><strong>17:45</strong> - Porto (TIC - Campanhã) → <strong>21:00</strong> - Lisboa (Oriente)</p>
+        <p>Duração: 3:15h | Preço: €5,49</p>
+        <a href="Editar-reserva.html" class="btn btn-primary" id="btn-lermais">Editar</a>
+        <a href="Cancelar-reserva.html" class="btn btn-primary" id="btn-lermais">Cancelar reserva</a>
+      </div>
+
+      <div class="viagem">
+        <p><strong>18:15</strong> - Porto (TIC - Campanhã) → <strong>21:30</strong> - Lisboa (Oriente)</p>
+        <p>Duração: 3:15h | Preço: €6,99</p>
+        <a href="Editar-reserva.html" class="btn btn-primary" id="btn-lermais">Editar</a>
+        <a href="Cancelar-reserva.html" class="btn btn-primary" id="btn-lermais">Cancelar reserva</a>
+      </div>
+      
+    </div>
+  </div>
+  
+</body>
+<!-- Rodapé -->
+<footer class="rodape">
+    <div class="container">
+      <div class="row">
+        <!-- Sobre -->
+        <div class="col-md-4">
+          <div class="rodape-sobre">
+            <h3>Sobre a <span>EST</span>ransportado</h3>
+            <p>A ESTransportado oferece soluções de transporte eficientes e acessíveis para estudantes, ligando-os com as suas instituições de ensino.</p>
+          </div>
+        </div>
+        
+        <!-- Contacto -->
+        <div class="col-md-4">
+          <div class="rodape-contactos">
+            <h3>Contacte-nos</h3>
+            <ul>
+              <li><strong>Email:</strong> info@estransportado.pt</li>
+              <li><strong>Telefone:</strong> +351 123 456 789</li>
+              <li><strong>Endereço:</strong> Rua da Universidade, 1000 - Castelo Branco, Portugal</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="rodape-direitos">
+        <p>&copy; 2025 ESTransportado. Todos os direitos reservados.</p>
+      </div>
+    </div>
+  </footer>
+</html>
