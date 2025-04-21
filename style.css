@@ -799,6 +799,9 @@ btn-login:hover{
   background-color: var(--second-color);
 }
 
+#perfil-aluno {
+  width: 900px;
+}
 
 
 
