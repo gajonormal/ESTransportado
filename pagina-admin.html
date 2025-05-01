@@ -36,6 +36,124 @@
 
     <a href="perfil-admin.html" class="btn btn-primary" id="btn-entrar">Perfil</a>
   </header>
+<style>
+  .dark-bg {
+  background-color: #1e1e1e;
+}
+
+.dashboard-box {
+  background-color: #121212;
+}
+
+.box-yellow {
+  background-color: #c6f31c;
+  color: black;
+}
+
+.section-title {
+  background-color: #212121;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  display: inline-block;
+}
+
+.dot-indicator {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.bar-graph {
+  height: 150px;
+}
+
+.bar {
+  width: 40px;
+  background-color: #161616;
+}
+
+.circle-placeholder {
+  width: 80px;
+  height: 80px;
+  background-color: #3a3a3a;
+  border-radius: 50%;
+}
+
+.progress-custom .progress-bar {
+  background-color: #96c12a;
+}
+
+</style>
+
+<!-- DASHBOARD ESTATÍSTICAS -->
+<section class="dashboard py-5 dark-bg">
+  <div class="container">
+    <div class="dashboard-box p-4 rounded text-white">
+      <h2 class="mb-4">Dashboard</h2>
+
+      <div class="d-flex gap-3 mb-4 flex-wrap">
+        <div class="badge bg-dark p-2">Este mês</div>
+        <div class="badge bg-dark p-2 d-flex align-items-center">
+          Denúncias pendentes <span class="badge bg-secondary ms-2">3</span>
+        </div>
+      </div>
+
+      <div class="row">
+        <!-- Gráfico de viagens -->
+        <div class="col-md-6 mb-4">
+          <div class="box-yellow p-4 rounded">
+            <h4 class="section-title">Viagens</h4>
+            <div class="d-flex gap-3 my-3">
+              <button class="btn btn-dark position-relative">
+                Viagens ativas
+                <span class="dot-indicator bg-primary"></span>
+              </button>
+              <button class="btn btn-dark position-relative">
+                Viagens executadas
+                <span class="dot-indicator bg-primary"></span>
+              </button>
+            </div>
+            <div class="bar-graph d-flex align-items-end gap-2">
+              <div class="bar" style="height: 20%;"></div>
+              <div class="bar" style="height: 60%;"></div>
+              <div class="bar" style="height: 40%;"></div>
+              <div class="bar" style="height: 70%;"></div>
+              <div class="bar" style="height: 65%;"></div>
+              <div class="bar" style="height: 90%;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Estatísticas à direita -->
+        <div class="col-md-6">
+          <div class="box-yellow p-3 rounded mb-3">
+            <h5 class="section-title">Total de utilizadores</h5>
+            <div class="circle-placeholder mx-auto my-3"></div>
+          </div>
+
+          <div class="box-yellow p-3 rounded mb-3">
+            <h5 class="section-title">Rotas mais populares</h5>
+            <div class="circle-placeholder mx-auto my-3"></div>
+          </div>
+
+          <div class="box-yellow p-3 rounded">
+            <h5 class="section-title">Avaliação média dos condutores</h5>
+            <div class="progress mt-3 progress-custom">
+              <div class="progress-bar" role="progressbar" style="width: 70%;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
 
 
  
