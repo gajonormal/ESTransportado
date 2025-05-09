@@ -33,7 +33,7 @@
       </div>
 
 
-    <a href="perfil-gestor.html" class="btn btn-primary" id="btn-entrar">Perfil</a>
+    <a href="perfil-gestor.php" class="btn btn-primary" id="btn-entrar">Perfil</a>
   </header>
 <style>
   .dark-bg {
