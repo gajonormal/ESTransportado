@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -17,19 +20,34 @@
 
 <body>
   <header>
-    <a href="#.html" class="logo">
+    <a href="index.php" class="logo">
       <img src="imagens/logo.png" alt="ESTransportado">
     </a>
 
     <ul class="navbar">
-      <li><a href="serviços.html">Serviços</a></li>
-      <li><a href="sobrenos.html">Sobre nós</a></li>
-      <li><a href="contactos.html">Contactos</a></li>
-      <li><a href="ajuda.html">Ajuda</a></li>
+      <li><a href="servicos.php">Serviços</a></li>
+      <li><a href="sobrenos.php">Sobre nós</a></li>
+      <li><a href="contactos.php">Contactos</a></li>
+      <li><a href="ajuda.php">Ajuda</a></li>
     </ul>
     
-
-    <a href="selecionarutilizador.html" class="btn btn-primary" id="btn-entrar">Entrar</a>
+    <?php if(isset($_SESSION['id_utilizador'])): ?>
+      <!-- Mostra perfil e logout se estiver logado -->
+      <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+          <?php echo htmlspecialchars($_SESSION['nome_completo']); ?>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <li><a class="dropdown-item" href="perfil.php">Perfil</a></li>
+          <li><a class="dropdown-item" href="minhas_viagens.php">Minhas Viagens</a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item" href="logout.php">Sair</a></li>
+        </ul>
+      </div>
+    <?php else: ?>
+      <!-- Mostra botão de login se não estiver logado -->
+      <a href="login.php" class="btn btn-primary" id="btn-entrar">Entrar</a>
+    <?php endif; ?>
   </header>
 
   <!-- CARROSSEL Bootstrap 5 -->
@@ -90,7 +108,7 @@
             <div class="detail-box">
               <h3>Transportes públicos</h3>
               <p>Texto de exemplo sobre transporte público.</p>
-              <a href="ler_mais.html" class="btn btn-primary" id="btn-lermais">Ler mais</a>
+              <a href="ler_mais.php" class="btn btn-primary" id="btn-lermais">Ler mais</a>
             </div>
           </div>
         </div>
@@ -103,7 +121,7 @@
             <div class="detail-box">
               <h3>Transportes privados</h3>
               <p>Texto de exemplo sobre transporte privado.</p>
-              <a href="ler_mais.html" class="btn btn-primary" id="btn-lermais">Ler mais</a>
+              <a href="ler_mais.php" class="btn btn-primary" id="btn-lermais">Ler mais</a>
             </div>
           </div>
         </div>
@@ -128,7 +146,7 @@
               are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in
               the middle of text. All
             </p>
-            <a href="ler_mais.html" class="btn btn-primary" id="btn-lermais">Ler mais</a>
+            <a href="ler_mais.php" class="btn btn-primary" id="btn-lermais">Ler mais</a>
           </div>
         </div>
         <div class="col-md-6">
@@ -148,12 +166,12 @@
     <div class="container-contactos">
       <div class="container-preenche">
         <h3>Contacte-nos</h3>
-        <form action="" class="preenche-contacto">
-          <input type="text" placeholder="Nome Completo">
-          <input type="email" name="" id="" placeholder="E-mail">
-          <input type="text" placeholder="Assunto">
-          <textarea name="" cols="30" rows="10" placeholder="Escreva a sua mensagem"></textarea>
-          <a href="#" class="btn btn-primary" id="btn-lermais">Enviar</a>
+        <form action="enviar_contato.php" method="POST" class="preenche-contacto">
+          <input type="text" name="nome" placeholder="Nome Completo" required>
+          <input type="email" name="email" placeholder="E-mail" required>
+          <input type="text" name="assunto" placeholder="Assunto" required>
+          <textarea name="mensagem" cols="30" rows="10" placeholder="Escreva a sua mensagem" required></textarea>
+          <button type="submit" class="btn btn-primary" id="btn-lermais">Enviar</button>
         </form>
       </div>
       <div class="mapa">
@@ -165,48 +183,46 @@
     </div>
   </section>
 
-
   <!-- Rodapé -->
-<footer class="rodape">
-  <div class="container">
-    <div class="row">
-      <!-- Sobre -->
-      <div class="col-md-4">
-        <div class="rodape-sobre">
-          <h3>Sobre a <span>EST</span>ransportado</h3>
-          <p>A ESTransportado oferece soluções de transporte eficientes e acessíveis para estudantes, ligando-os com as suas instituições de ensino.</p>
+  <footer class="rodape">
+    <div class="container">
+      <div class="row">
+        <!-- Sobre -->
+        <div class="col-md-4">
+          <div class="rodape-sobre">
+            <h3>Sobre a <span>EST</span>ransportado</h3>
+            <p>A ESTransportado oferece soluções de transporte eficientes e acessíveis para estudantes, ligando-os com as suas instituições de ensino.</p>
+          </div>
+        </div>
+        <!-- Links Rápidos -->
+        <div class="col-md-4">
+          <div class="rodape-links">
+            <h3>Links <span>Rápidos</span></h3>
+            <ul>
+              <li><a href="index.php">Início</a></li>
+              <li><a href="servicos.php">Serviços</a></li>
+              <li><a href="sobrenos.php">Sobre Nós</a></li>
+              <li><a href="contactos.php">Contactos</a></li>
+            </ul>
+          </div>
+        </div>
+        <!-- Contacto -->
+        <div class="col-md-4">
+          <div class="rodape-contactos">
+            <h3>Contacte-nos</h3>
+            <ul>
+              <li><strong>Email:</strong> info@estransportado.pt</li>
+              <li><strong>Telefone:</strong> +351 123 456 789</li>
+              <li><strong>Endereço:</strong> Rua da Universidade, 1000 - Castelo Branco, Portugal</li>
+            </ul>
+          </div>
         </div>
       </div>
-      <!-- Links Rápidos -->
-      <div class="col-md-4">
-        <div class="rodape-links">
-          <h3>Links <span>Rápidos</span></h3>
-          <ul>
-            <li><a href="#">Início</a></li>
-            <li><a href="#">Serviços</a></li>
-            <li><a href="#">Sobre Nós</a></li>
-            <li><a href="#">Contactos</a></li>
-          </ul>
-        </div>
-      </div>
-      <!-- Contacto -->
-      <div class="col-md-4">
-        <div class="rodape-contactos">
-          <h3>Contacte-nos</h3>
-          <ul>
-            <li><strong>Email:</strong> info@estransportado.pt</li>
-            <li><strong>Telefone:</strong> +351 123 456 789</li>
-            <li><strong>Endereço:</strong> Rua da Universidade, 1000 - Castelo Branco, Portugal</li>
-          </ul>
-        </div>
+      <div class="rodape-direitos">
+        <p>&copy; <?php echo date('Y'); ?> ESTransportado. Todos os direitos reservados.</p>
       </div>
     </div>
-    <div class="rodape-direitos">
-      <p>&copy; 2025 ESTransportado. Todos os direitos reservados.</p>
-    </div>
-  </div>
-</footer>
+  </footer>
 
 </body>
-
 </html>
