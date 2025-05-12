@@ -156,24 +156,24 @@ CREATE TABLE Estatisticas (
 -- Inserir dados de teste para Utilizadores
 INSERT INTO Utilizadores (email_institucional, password_hash, nome_completo, data_nascimento, numero_matricula, sexo, tipo) VALUES
 -- Administradores
-('admin@ipcb.pt', '$2y$10$8MNjsOCKWDMYLRbvx1GM8.XzXM3WOYrS7Tq3kWGRX9OXsL9iAEJRC', 'Admin Principal', '1985-05-15', 'ADM001', 'masculino', 'admin'),
-('admin2@ipcb.pt', '$2y$10$8MNjsOCKWDMYLRbvx1GM8.XzXM3WOYrS7Tq3kWGRX9OXsL9iAEJRC', 'Admin Secundário', '1990-10-20', 'ADM002', 'feminino', 'admin'),
+('admin@ipcb.pt', 'admin123', 'Admin Principal', '1985-05-15', 'ADM001', 'masculino', 'admin'),
+('admin2@ipcb.pt', 'admin123', 'Admin Secundário', '1990-10-20', 'ADM002', 'feminino', 'admin'),
 
 -- Gestores
-('gestor1@ipcb.pt', '$2y$10$jQI2u6yuIGJ5JmMP3GR2E.ltfHXnhIuOgVOLMqvD2f2X5zgdgXJDi', 'Gestor Transportes', '1988-03-12', 'GES001', 'masculino', 'gestor'),
-('gestor2@ipcb.pt', '$2y$10$jQI2u6yuIGJ5JmMP3GR2E.ltfHXnhIuOgVOLMqvD2f2X5zgdgXJDi', 'Gestor Sistema', '1991-07-22', 'GES002', 'feminino', 'gestor'),
+('gestor1@ipcb.pt', 'gestor123', 'Gestor Transportes', '1988-03-12', 'GES001', 'masculino', 'gestor'),
+('gestor2@ipcb.pt', 'gestor123', 'Gestor Sistema', '1991-07-22', 'GES002', 'feminino', 'gestor'),
 
 -- Alunos
-('aluno1@ipcbcampus.pt', '$2y$10$5nxlGf.ojtFRYEGkzLhIluiUwQG/2ROTjUDKkRgN6LQnbgYNHzL92', 'João Silva', '2000-01-15', 'A12345', 'masculino', 'aluno'),
-('aluno2@ipcbcampus.pt', '$2y$10$5nxlGf.ojtFRYEGkzLhIluiUwQG/2ROTjUDKkRgN6LQnbgYNHzL92', 'Maria Santos', '2001-05-20', 'A12346', 'feminino', 'aluno'),
-('aluno3@ipcbcampus.pt', '$2y$10$5nxlGf.ojtFRYEGkzLhIluiUwQG/2ROTjUDKkRgN6LQnbgYNHzL92', 'Pedro Costa', '1999-11-10', 'A12347', 'masculino', 'aluno'),
-('aluno4@ipcbcampus.pt', '$2y$10$5nxlGf.ojtFRYEGkzLhIluiUwQG/2ROTjUDKkRgN6LQnbgYNHzL92', 'Ana Ferreira', '2002-03-25', 'A12348', 'feminino', 'aluno'),
-('aluno5@ipcbcampus.pt', '$2y$10$5nxlGf.ojtFRYEGkzLhIluiUwQG/2ROTjUDKkRgN6LQnbgYNHzL92', 'Miguel Oliveira', '2000-07-30', 'A12349', 'masculino', 'aluno'),
-('aluno6@ipcbcampus.pt', '$2y$10$5nxlGf.ojtFRYEGkzLhIluiUwQG/2ROTjUDKkRgN6LQnbgYNHzL92', 'Sofia Martins', '2001-09-05', 'A12350', 'feminino', 'aluno'),
-('aluno7@ipcbcampus.pt', '$2y$10$5nxlGf.ojtFRYEGkzLhIluiUwQG/2ROTjUDKkRgN6LQnbgYNHzL92', 'Tiago Rocha', '1999-12-18', 'A12351', 'masculino', 'aluno'),
-('aluno8@ipcbcampus.pt', '$2y$10$5nxlGf.ojtFRYEGkzLhIluiUwQG/2ROTjUDKkRgN6LQnbgYNHzL92', 'Carolina Dias', '2002-02-10', 'A12352', 'feminino', 'aluno'),
-('aluno9@ipcbcampus.pt', '$2y$10$5nxlGf.ojtFRYEGkzLhIluiUwQG/2ROTjUDKkRgN6LQnbgYNHzL92', 'Daniel Sousa', '2000-06-15', 'A12353', 'masculino', 'aluno'),
-('aluno10@ipcbcampus.pt', '$2y$10$5nxlGf.ojtFRYEGkzLhIluiUwQG/2ROTjUDKkRgN6LQnbgYNHzL92', 'Mariana Lopes', '2001-04-22', 'A12354', 'feminino', 'aluno');
+('aluno1@ipcbcampus.pt', 'aluno123', 'João Silva', '2000-01-15', 'A12345', 'masculino', 'aluno'),
+('aluno2@ipcbcampus.pt', 'aluno123', 'Maria Santos', '2001-05-20', 'A12346', 'feminino', 'aluno'),
+('aluno3@ipcbcampus.pt', 'aluno123', 'Pedro Costa', '1999-11-10', 'A12347', 'masculino', 'aluno'),
+('aluno4@ipcbcampus.pt', 'aluno123', 'Ana Ferreira', '2002-03-25', 'A12348', 'feminino', 'aluno'),
+('aluno5@ipcbcampus.pt', 'aluno123', 'Miguel Oliveira', '2000-07-30', 'A12349', 'masculino', 'aluno'),
+('aluno6@ipcbcampus.pt', 'aluno123', 'Sofia Martins', '2001-09-05', 'A12350', 'feminino', 'aluno'),
+('aluno7@ipcbcampus.pt', 'aluno123', 'Tiago Rocha', '1999-12-18', 'A12351', 'masculino', 'aluno'),
+('aluno8@ipcbcampus.pt', 'aluno123', 'Carolina Dias', '2002-02-10', 'A12352', 'feminino', 'aluno'),
+('aluno9@ipcbcampus.pt', 'aluno123', 'Daniel Sousa', '2000-06-15', 'A12353', 'masculino', 'aluno'),
+('aluno10@ipcbcampus.pt', 'aluno123', 'Mariana Lopes', '2001-04-22', 'A12354', 'feminino', 'aluno');
 
 -- Inserir dados de teste para Condutores
 INSERT INTO Condutores (nome_condutor, total_avaliacoes, media_avaliacoes) VALUES
