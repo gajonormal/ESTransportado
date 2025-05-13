@@ -46,7 +46,7 @@ session_start();
       </div>
     <?php else: ?>
       <!-- Mostra botão de login se não estiver logado -->
-      <a href="login.php" class="btn btn-primary" id="btn-entrar">Entrar</a>
+      <a href="pagina-login.php" class="btn btn-primary" id="btn-entrar">Entrar</a>
     <?php endif; ?>
   </header>
 

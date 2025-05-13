@@ -32,7 +32,7 @@
 
     
 
-    <a href="perfil-aluno.html" class="btn btn-primary" id="btn-entrar">Perfil</a>
+    <a href="perfil.php" class="btn btn-primary" id="btn-entrar">Perfil</a>
   </header>
 
 
