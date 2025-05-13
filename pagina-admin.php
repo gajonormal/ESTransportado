@@ -35,7 +35,7 @@
 
     
 
-    <a href="perfil-admin.html" class="btn btn-primary" id="btn-entrar">Perfil</a>
+    <a href="perfil.php" class="btn btn-primary" id="btn-entrar">Perfil</a>
   </header>
 <style>
   .dark-bg {
