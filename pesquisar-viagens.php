@@ -10,47 +10,76 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'aluno') {
 // Incluir conexão com o banco de dados
 require_once 'basedados/basedados.h';
 
-// Verificar se o formulário foi enviado
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Receber e limpar os dados do formulário
-    $tipo_viagem = isset($_POST['tipo_viagem']) ? htmlspecialchars($_POST['tipo_viagem']) : 'ida';
-    $origem = isset($_POST['origem']) ? htmlspecialchars($_POST['origem']) : '';
-    $destino = isset($_POST['destino']) ? htmlspecialchars($_POST['destino']) : '';
-    $tipo_transporte = isset($_POST['tipo_transporte']) ? htmlspecialchars($_POST['tipo_transporte']) : 'publica';
-    $data_viagem = isset($_POST['data_viagem']) ? htmlspecialchars($_POST['data_viagem']) : '';
+// Coletar dados do formulário
+$origem = isset($_POST['origem']) ? mysqli_real_escape_string($conn, $_POST['origem']) : '';
+$destino = isset($_POST['destino']) ? mysqli_real_escape_string($conn, $_POST['destino']) : '';
+$tipo_transporte = isset($_POST['tipo_transporte']) ? mysqli_real_escape_string($conn, $_POST['tipo_transporte']) : '';
+$data_viagem = isset($_POST['data_viagem']) ? mysqli_real_escape_string($conn, $_POST['data_viagem']) : '';
 
-    // Formatar a data para exibição
-    $data_formatada = date('d/m/Y', strtotime($data_viagem));
-    
-    // Verificar se todos os campos necessários foram preenchidos
-    if (empty($origem) || empty($destino) || empty($data_viagem)) {
-        $_SESSION['erro'] = "Todos os campos são obrigatórios";
-        header("Location: index.php");
-        exit();
+// DEBUG: Mostrar valores recebidos
+echo "<!-- DEBUG: origem=$origem, destino=$destino, tipo_transporte=$tipo_transporte, data_viagem=$data_viagem -->";
+
+// Construir a query SQL para buscar viagens
+$sql = "SELECT v.* FROM viagens v WHERE v.ativo = 1";
+$conditions = array();
+
+if (!empty($origem)) {
+    $conditions[] = "v.origem = '$origem'";
+}
+
+if (!empty($destino)) {
+    $conditions[] = "v.destino = '$destino'";
+}
+
+// Converter valor do formulário para valor do banco de dados
+if (!empty($tipo_transporte)) {
+    $tipo_banco = ($tipo_transporte == 'publica') ? 'publico' : 'privado';
+    $conditions[] = "v.tipo = '$tipo_banco'";
+}
+
+if (!empty($data_viagem)) {
+    $conditions[] = "DATE(v.data_partida) = '$data_viagem'";
+}
+
+if (count($conditions) > 0) {
+    $sql .= " AND " . implode(' AND ', $conditions);
+}
+
+// DEBUG: Mostrar query SQL
+echo "<!-- DEBUG: SQL=$sql -->";
+
+$result = mysqli_query($conn, $sql);
+
+// DEBUG: Verificar erros na query
+if (!$result) {
+    echo "<!-- DEBUG: Erro SQL: " . mysqli_error($conn) . " -->";
+}
+
+// Array para armazenar as viagens com lugares disponíveis
+$viagens = array();
+
+if ($result && mysqli_num_rows($result) > 0) {
+    while ($viagem = mysqli_fetch_assoc($result)) {
+        // Buscar número de reservas para esta viagem
+        $id_viagem = $viagem['id_viagem'];
+        $sql_reservas = "SELECT COUNT(*) as total_reservas 
+                         FROM reservas 
+                         WHERE id_viagem = $id_viagem AND estado = 'confirmada'";
+        $result_reservas = mysqli_query($conn, $sql_reservas);
+        
+        if ($result_reservas) {
+            $reservas = mysqli_fetch_assoc($result_reservas);
+            
+            // Calcular lugares disponíveis
+            $lugares_disponiveis = $viagem['lotacao_maxima'] - $reservas['total_reservas'];
+            
+            // Adicionar à array de viagens apenas se houver lugares disponíveis
+            if ($lugares_disponiveis > 0) {
+                $viagem['lugares_disponiveis'] = $lugares_disponiveis;
+                $viagens[] = $viagem;
+            }
+        }
     }
-
-    // Consulta SQL base dependendo do tipo de transporte
-    if ($tipo_transporte == 'publica') {
-        $sql = "SELECT v.id, r.nome_rota, t.empresa, v.hora_partida, v.hora_chegada, v.preco, v.vagas_disponiveis 
-                FROM viagens v 
-                JOIN rotas r ON v.rota_id = r.id 
-                JOIN transportadoras t ON v.transportadora_id = t.id 
-                WHERE r.origem = ? AND r.destino = ? AND DATE(v.data_partida) = ? AND v.tipo = 'publica'
-                ORDER BY v.hora_partida ASC";
-    } else {
-        $sql = "SELECT v.id, r.nome_rota, t.empresa, v.hora_partida, v.hora_chegada, v.preco, v.vagas_disponiveis 
-                FROM viagens v 
-                JOIN rotas r ON v.rota_id = r.id 
-                JOIN transportadoras t ON v.transportadora_id = t.id 
-                WHERE r.origem = ? AND r.destino = ? AND DATE(v.data_partida) = ? AND v.tipo = 'privada'
-                ORDER BY v.hora_partida ASC";
-    }
-
-    // Preparar e executar a consulta
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sss", $origem, $destino, $data_viagem);
-    $stmt->execute();
-    $resultado = $stmt->get_result();
 }
 ?>
 
@@ -60,229 +89,239 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resultados da Pesquisa - ESTransportado</title>
-
     <!-- BOOTSTRAP 5 CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-
     <!-- CSS Personalizado -->
     <link rel="stylesheet" href="style.css">
-
     <!-- BOXICONS -->
     <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
-
     <style>
-        .resultados-container {
-            padding: 30px 0;
-            max-width: 1200px;
-            margin: 0 auto;
+        /* Main Content */
+        .main-container {
+            max-width: 95%;
+            width: 1400px;
+            margin: 40px auto;
+            padding: 0 20px;
         }
-        .criterios-pesquisa {
-            background-color: #111111;
-            border-radius: 10px;
-            padding: 20px;
+        
+        .tab-container {
+            background: rgb(27, 27, 27);
+            border-radius: 20px;
+            padding: 30px;
+            width: 100%;
+        }
+        
+        h1 {
+            text-align: center;
             margin-bottom: 30px;
-            color: #fff;
-        }
-        .viagem-card {
-            background-color: #222221;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-            color: #fff;
-            transition: all 0.3s ease;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .viagem-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
-        }
-        .viagem-info {
-            flex: 1;
-        }
-        .viagem-horario {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        .viagem-horario h3 {
-            margin: 0 20px;
-            font-size: 20px;
             font-weight: bold;
+            color: white;
         }
+        
         .viagem-detalhes {
             display: flex;
-            justify-content: space-between;
             flex-wrap: wrap;
+            gap: 25px;
+            font-size: 0.95em;
+            color: #ccc;
         }
-        .viagem-detalhes p {
-            margin-right: 20px;
-            margin-bottom: 5px;
+        
+        .viagem-detalhes span {
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
-        .viagem-preco {
-            text-align: right;
-            padding: 0 20px;
-            border-left: 1px solid #444;
+        
+        /* Viagem Item */
+        .viagem-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #222;
+            border-radius: 15px;
+            padding: 25px 30px;
+            margin-bottom: 25px;
+            color: white;
         }
-        .preco-valor {
-            font-size: 24px;
+        
+        .viagem-info {
+            flex-grow: 1;
+            margin-right: 40px;
+        }
+        
+        .viagem-info h4 {
+            color: #c2ff22;
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            display: flex;
+            align-items: center;
+        }
+        
+        .tipo-badge {
+            background: #555;
+            color: #eee;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            margin-left: 15px;
+        }
+        
+        .preco {
+            font-size: 1.5em;
             font-weight: bold;
             color: #c2ff22;
+            margin: 15px 0;
         }
+        
+        .lugares {
+            margin: 15px 0;
+            font-size: 1.1em;
+        }
+        
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
         .btn-reservar {
             background-color: #c2ff22;
-            color: #000;
+            color: #333;
             border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: block;
-            margin-top: 10px;
-        }
-        .btn-reservar:hover {
-            background-color: #a8e600;
-        }
-        .sem-resultados {
-            background-color: #222221;
             border-radius: 10px;
-            padding: 30px;
-            text-align: center;
-            color: #fff;
+            padding: 12px 25px;
+            font-weight: bold;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
         }
-        .viagem-duracao {
-            font-size: 14px;
-            color: #888;
+        
+        .btn-reservar:hover {
+            background-color: #a8e01e;
         }
-        .badge-vagas {
-            background-color: #28a745;
+        
+        /* No resultados message */
+        .no-resultados {
+            background-color: #222;
             color: white;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 14px;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
         }
-        .baixa-disponibilidade {
-            background-color: #ffc107;
+        
+        .no-resultados h3 {
+            color: #c2ff22;
+            margin-bottom: 20px;
         }
-        .muito-baixa-disponibilidade {
-            background-color: #dc3545;
+        
+        .no-resultados .btn-primary {
+            background-color: #c2ff22;
+            color: #333;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 25px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        
+        .pesquisa-info {
+            background-color: #333;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            color: #eee;
+        }
+        
+        .pesquisa-info strong {
+            color: #c2ff22;
         }
     </style>
 </head>
 <body>
     <header>
-        <a href="index.php" class="logo">
+        <a href="pagina-aluno.php" class="logo">
             <img src="imagens/logo.png" alt="ESTransportado">
         </a>
-
-        <ul class="navbar">
-            <li><a href="as-minhas-reservas.html">As minhas reservas</a></li>
-            <li><a href="consultar-horarios.html">Consultar horários</a></li>
-            <li><a href="ajuda.html">Ajuda</a></li>
-        </ul>
-
-        <a href="perfil.php" class="btn btn-primary" id="btn-entrar">Perfil</a>
     </header>
 
-    <main class="resultados-container">
-        <div class="criterios-pesquisa">
-            <h2>Resultados da pesquisa</h2>
-            <div class="row">
-                <div class="col-md-3">
-                    <p><strong>De:</strong> <?php echo $origem; ?></p>
-                </div>
-                <div class="col-md-3">
-                    <p><strong>Para:</strong> <?php echo $destino; ?></p>
-                </div>
-                <div class="col-md-3">
-                    <p><strong>Data:</strong> <?php echo $data_formatada; ?></p>
-                </div>
-                <div class="col-md-3">
-                    <p><strong>Tipo:</strong> <?php echo ucfirst($tipo_transporte); ?></p>
-                </div>
+    <!-- Main Content -->
+    <div class="main-container">
+        <h1>Resultados da Pesquisa</h1>
+        
+        <div class="tab-container">
+            <div class="pesquisa-info">
+                <p>
+                    <span><i class='bx bx-map-pin'></i> De <strong><?php echo htmlspecialchars($origem); ?></strong> para <strong><?php echo htmlspecialchars($destino); ?></strong></span>
+                    <span class="ms-4"><i class='bx bx-calendar'></i> Data: <strong><?php echo date('d/m/Y', strtotime($data_viagem)); ?></strong></span>
+                    <span class="ms-4"><i class='bx bx-bus'></i> Tipo: <strong><?php echo ($tipo_transporte == 'publica' ? 'Pública' : 'Privada'); ?></strong></span>
+                </p>
             </div>
-        </div>
-
-        <?php if (isset($resultado) && $resultado->num_rows > 0): ?>
-            <div class="resultados-lista">
-                <?php while ($viagem = $resultado->fetch_assoc()): ?>
-                    <?php
-                    // Calcular a duração da viagem
-                    $hora_partida = strtotime($viagem['hora_partida']);
-                    $hora_chegada = strtotime($viagem['hora_chegada']);
-                    $duracao = $hora_chegada - $hora_partida;
-                    $horas = floor($duracao / 3600);
-                    $minutos = floor(($duracao % 3600) / 60);
-                    
-                    // Determinar a classe de disponibilidade
-                    $vagas_class = '';
-                    if ($viagem['vagas_disponiveis'] <= 5) {
-                        $vagas_class = 'muito-baixa-disponibilidade';
-                    } elseif ($viagem['vagas_disponiveis'] <= 10) {
-                        $vagas_class = 'baixa-disponibilidade';
-                    }
-                    ?>
-                    <div class="viagem-card">
+            
+            <?php if (!empty($viagens)): ?>
+                <?php foreach ($viagens as $viagem): ?>
+                    <div class="viagem-item">
                         <div class="viagem-info">
-                            <div class="viagem-horario">
-                                <h3><?php echo substr($viagem['hora_partida'], 0, 5); ?></h3>
-                                <div>
-                                    <div class="viagem-duracao">
-                                        <?php echo $horas > 0 ? $horas . 'h ' : ''; ?><?php echo $minutos; ?>min
-                                    </div>
-                                    <div>⟶</div>
-                                </div>
-                                <h3><?php echo substr($viagem['hora_chegada'], 0, 5); ?></h3>
-                            </div>
+                            <h4>
+                                <?= htmlspecialchars($viagem['origem']) ?> → <?= htmlspecialchars($viagem['destino']) ?>
+                                <span class="tipo-badge"><?= ($viagem['tipo'] == 'publico' ? 'Pública' : 'Privada') ?></span>
+                            </h4>
+                            
                             <div class="viagem-detalhes">
-                                <p><strong>Rota:</strong> <?php echo $viagem['nome_rota']; ?></p>
-                                <p><strong>Transportadora:</strong> <?php echo $viagem['empresa']; ?></p>
-                                <p>
-                                    <span class="badge-vagas <?php echo $vagas_class; ?>">
-                                        <?php echo $viagem['vagas_disponiveis']; ?> vagas disponíveis
-                                    </span>
-                                </p>
+                                <span><i class='bx bx-time'></i> Partida: <?= date('H:i', strtotime($viagem['data_partida'])) ?> - <?= date('d/m/Y', strtotime($viagem['data_partida'])) ?></span>
+                                <span><i class='bx bx-time-five'></i> Chegada: <?= date('H:i', strtotime($viagem['data_chegada'])) ?> - <?= date('d/m/Y', strtotime($viagem['data_chegada'])) ?></span>
+                            </div>
+                            
+                            <div class="preco">
+                                <i class='bx bx-euro'></i> <?= number_format($viagem['preco'], 2) ?>
+                            </div>
+                            
+                            <div class="lugares">
+                                <i class='bx bx-user'></i> Lugares disponíveis: <strong><?= $viagem['lugares_disponiveis'] ?></strong> de <?= $viagem['lotacao_maxima'] ?>
                             </div>
                         </div>
-                        <div class="viagem-preco">
-                            <div class="preco-valor"><?php echo number_format($viagem['preco'], 2); ?>€</div>
-                            <a href="reservar-viagem.php?id=<?php echo $viagem['id']; ?>" class="btn-reservar">Reservar</a>
+                        
+                        <div class="action-buttons">
+                            <a href="reservar-viagem.php?id=<?= $viagem['id_viagem'] ?>" class="btn-reservar">
+                                <i class='bx bx-check-circle'></i> Reservar
+                            </a>
                         </div>
                     </div>
-                <?php endwhile; ?>
-            </div>
-        <?php else: ?>
-            <div class="sem-resultados">
-                <h3>Não foram encontrados resultados para a sua pesquisa</h3>
-                <p>Tente alterar os critérios de pesquisa ou selecionar outra data.</p>
-                <a href="index.php" class="btn btn-primary mt-3">Voltar</a>
-            </div>
-        <?php endif; ?>
-    <!-- Rodapé -->
+                <?php endforeach; ?>
+            <?php else: ?>
+                <div class="no-resultados">
+                    <h3>Nenhuma viagem encontrada</h3>
+                    <p>Não foram encontradas viagens disponíveis com os critérios selecionados.</p>
+                    <p>Tente alterar os filtros da sua pesquisa ou escolher outra data.</p>
+                    <a href="pagina-aluno.php" class="btn btn-primary">
+                        <i class='bx bx-arrow-back'></i> Voltar à pesquisa
+                    </a>
+                </div>
+            <?php endif; ?>
+        </div>
+    </div>
+
     <footer class="rodape">
         <div class="container">
             <div class="row">
-                <!-- Sobre -->
                 <div class="col-md-4">
                     <div class="rodape-sobre">
                         <h3>Sobre a <span>EST</span>ransportado</h3>
                         <p>A ESTransportado oferece soluções de transporte eficientes e acessíveis para estudantes, ligando-os com as suas instituições de ensino.</p>
                     </div>
                 </div>
-                <!-- Links Rápidos -->
                 <div class="col-md-4">
                     <div class="rodape-links">
                         <h3>Links <span>Rápidos</span></h3>
-                        <ul>
-                            <li><a href="as-minhas-reservas.html">As minhas reservas</a></li>
-                            <li><a href="ajuda.html">Ajuda</a></li>
-                            <li><a href="perfil.php">Perfil</a></li>
-                        </ul>
+                            <ul>
+                                <li><a href="minhas-reservas.php">As minhas reservas</a></li>
+                                <li><a href="consultar-horarios.php">Consultar horários</a></li>
+                                <li><a href="ajuda.php">Ajuda</a></li>
+                            </ul>
                     </div>
                 </div>
-                <!-- Contacto -->
                 <div class="col-md-4">
                     <div class="rodape-contactos">
                         <h3>Contacte-nos</h3>
@@ -300,7 +339,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
     </footer>
 
-    <!-- JavaScript do Bootstrap -->
+    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Boxicons JS -->
+    <script src="https://unpkg.com/boxicons@latest/dist/boxicons.js"></script>
 </body>
 </html>
