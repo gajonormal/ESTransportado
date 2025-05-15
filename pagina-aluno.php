@@ -264,11 +264,11 @@ if ($result) {
         <div class="col-md-4">
           <div class="rodape-links">
             <h3>Links <span>Rápidos</span></h3>
-            <ul>
-              <li><a href="#">As minhas reservas</a></li>
-              <li><a href="#">Ajuda</a></li>
-              <li><a href="#">Perfil</a></li>
-            </ul>
+              <ul>
+                <li><a href="minhas-reservas.php">As minhas reservas</a></li>
+                <li><a href="consultar-horarios.php">Consultar horários</a></li>
+               <li><a href="ajuda.php">Ajuda</a></li>
+             </ul>
           </div>
         </div>
         <!-- Contacto -->
