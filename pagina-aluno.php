@@ -1,3 +1,16 @@
+<?php
+session_start();
+
+// Verificar se o usuário está logado e é admin
+if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'aluno') {
+    header("Location: pagina-login.php");
+    exit();
+}
+
+// Incluir conexão com o banco de dados
+require_once 'basedados/basedados.h';
+?>
+
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -14,6 +27,41 @@
   <!-- BOXICONS -->
   <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
 </head>
+<style>
+/* Estilo para os grupos de rádio */
+.radio-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    background-color: #111111;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+/* Esconde o input radio padrão */
+.radio-group input[type="radio"] {
+    display: none;
+}
+
+/* Estilo das labels que funcionarão como botões */
+.radio-group label {
+    padding: 8px 15px;
+    background-color: #222221;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    flex: 1;
+}
+
+/* Estilo quando o radio está selecionado */
+.radio-group input[type="radio"]:checked + label {
+    background-color: #c2ff22;
+    color: #000;
+    font-weight: bold;
+}
+    
+</style>
 
 <body>
   <header>
@@ -36,35 +84,42 @@
   </header>
 
 
-  <section class="procura-section">
+<section class="procura-section">
     <h2>Para onde deseja ir</h2>
-    <form>
-        
+    <form method="POST" action="pesquisar-viagens.php">
         <div class="radio-group">
-            <button type="button" class="selected">Ida</button>
-            <button type="button">Ida e volta</button>
+            <input type="radio" id="tipo_ida" name="tipo_viagem" value="ida" checked>
+            <label for="tipo_ida">Ida</label>
+            
+            <input type="radio" id="tipo_ida_volta" name="tipo_viagem" value="ida_volta">
+            <label for="tipo_ida_volta">Ida e volta</label>
         </div>
+        
         <label>De</label>
         <div class="box-inserir">
-            <input type="text" placeholder="Ex: Lisboa">
+            <input type="text" name="origem" placeholder="Ex: Lisboa" required>
         </div>
+        
         <label>Para</label>
         <div class="box-inserir">
-            <input type="text" placeholder="Ex: Castelo Branco">
+            <input type="text" name="destino" placeholder="Ex: Castelo Branco" required>
         </div>
+        
         <label>Tipo de viagem</label>
         <div class="radio-group">
-          <button type="button" class="selected">Publica</button>
-          <button type="button">Privada</button>
+            <input type="radio" id="tipo_publica" name="tipo_transporte" value="publica" checked>
+            <label for="tipo_publica">Pública</label>
+            
+            <input type="radio" id="tipo_privada" name="tipo_transporte" value="privada">
+            <label for="tipo_privada">Privada</label>
         </div>
+        
         <label>Data</label>
-                <div class="box-inserir">
-                    <input type="date">
-                </div>
+        <div class="box-inserir">
+            <input type="date" name="data_viagem" required>
+        </div>
 
-      
-        <a href="viagens-disponiveis.html" button type="submit" class="btn-registo" >Pesquisar</a>
-      
+        <button type="submit" class="btn-registo">Pesquisar</button>
     </form>
 </section>
   <!-- Secção de Serviços -->

@@ -52,180 +52,238 @@ while ($row = $result->fetch_assoc()) {
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ESTransportado</title>
-
-  <!-- BOOTSTRAP 5 CSS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-
-  <!-- CSS Personalizado -->
-  <link rel="stylesheet" href="style.css">
-
-  <!-- BOXICONS -->
-  <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESTransportado - Gerir Registos Pendentes</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
+    <style>
+        /* Main Content */
+        .main-container {
+            max-width: 95%;
+            width: 1400px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        
+        .tab-container {
+            background: rgb(27, 27, 27);
+            border-radius: 20px;
+            padding: 30px;
+            width: 100%;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: bold;
+            color: white;
+        }
+        
+        /* Utilizador Items */
+        .utilizador-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #222;
+            border-radius: 15px;
+            padding: 25px 30px;
+            margin-bottom: 25px;
+            color: white;
+        }
+        
+        .utilizador-info {
+            flex-grow: 1;
+            margin-right: 40px;
+        }
+        
+        .utilizador-info h4 {
+            color: #c2ff22;
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            display: flex;
+            align-items: center;
+        }
+        
+        .utilizador-detalhes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            font-size: 0.95em;
+            color: #ccc;
+        }
+        
+        .utilizador-detalhes span {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .tipo-badge {
+            background: #555;
+            color: #eee;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            margin-left: 15px;
+        }
+        
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .btn-action {
+            background-color: #333;
+            border: none;
+            border-radius: 10px;
+            padding: 12px;
+            color: white;
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            min-width: 50px;
+            transition: all 0.3s;
+        }
+        
+        .btn-accept {
+            color: #4CAF50;
+        }
+        
+        .btn-reject {
+            color: #ff6b6b;
+        }
+        
+        .btn-action:hover {
+            background-color: #444;
+        }
+        
+        /* No registros message */
+        .no-registros {
+            background-color: #222;
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+        }
+    </style>
 </head>
-
-<header>
-    <a href="pagina-admin.php" class="logo">
-      <img src="imagens/logo.png" alt="ESTransportado">
-    </a>
-</header>
-
 <body>
-  <style>
-    .tab-container {
-      background: #c2ff22;
-      border-radius: 20px;
-      padding: 20px;
-      max-width: 800px;
-      margin: 50px auto;
-    }
+    <header>
+        <a href="pagina-admin.php" class="logo">
+            <img src="imagens/logo.png" alt="ESTransportado">
+        </a>
+    </header>
 
-    .tabs {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 20px;
-      gap: 10px;
-    }
-
-    .tabs .btn-tab {
-        background-color: #333;
-        border: none;
-        padding: 10px 20px;
-        color: white;
-        border-radius: 12px;
-        font-weight: bold;
-        text-decoration: none;
-    }
-
-    .tabs .btn-tab.active {
-      background-color: #c2ff22;
-      color: black;
-    }
-
-    .item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background-color: #222;
-      border-radius: 15px;
-      padding: 15px 20px;
-      margin-bottom: 15px;
-      color: white;
-    }
-
-    .item .user-info {
-      flex-grow: 1;
-      color: white;
-    }
-
-    .item .icons {
-      display: flex;
-      gap: 10px;
-    }
-
-    .btn-icon {
-        background-color: #333;
-        border: none;
-        border-radius: 10px;
-        padding: 10px;
-        color: white;
-        font-size: 18px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        text-decoration: none;
-    }
-
-    .btn-icon:hover {
-        background-color: #555;
-    }
-
-    h2 {
-      text-align: center;
-      margin-bottom: 30px;
-      font-weight: bold;
-    }
-    
-    .no-registros {
-      text-align: center;
-      padding: 20px;
-      color: white;
-      background-color: #222;
-      border-radius: 15px;
-    }
-  </style>
-
-  <main>
-    <section class="form-section" id="perfil-aluno">
-        <h2>Gerir registos</h2>
-
+    <!-- Main Content -->
+    <div class="main-container">
+        <h1>Gerir Registos Pendentes</h1>
+        
         <div class="tab-container">
-          <?php if (empty($registos_pendentes)): ?>
-            <div class="no-registros">Não há registros pendentes</div>
-          <?php else: ?>
-            <?php foreach ($registos_pendentes as $registo): ?>
-              <div class="item">
-                <div class="user-info">
-                  <?= htmlspecialchars($registo['nome_completo']) ?> (<?= htmlspecialchars($registo['email_institucional']) ?>)
-                  <div style="font-size: 0.8em; color: #ccc;">
-                    Matrícula: <?= htmlspecialchars($registo['numero_matricula']) ?> | 
-                    Registado em: <?= date('d/m/Y H:i', strtotime($registo['data_registo'])) ?>
-                  </div>
-                </div>
-                <div class="icons">
-                  <form method="POST" style="display: inline;">
-                    <input type="hidden" name="id_utilizador" value="<?= $registo['id_utilizador'] ?>">
-                    <input type="hidden" name="acao" value="aceitar">
-                    <button type="submit" title="Aceitar" class="btn-icon"><i class='bx bxs-user-check'></i></button>
-                  </form>
-                  <form method="POST" style="display: inline;">
-                    <input type="hidden" name="id_utilizador" value="<?= $registo['id_utilizador'] ?>">
-                    <input type="hidden" name="acao" value="recusar">
-                    <button type="submit" title="Recusar" class="btn-icon"><i class='bx bx-x'></i></button>
-                  </form>
-                </div>
-              </div>
-            <?php endforeach; ?>
-          <?php endif; ?>
+            <!-- Lista de registos pendentes -->
+            <?php if (empty($registos_pendentes)): ?>
+                <div class="no-registros">Não há registros pendentes</div>
+            <?php else: ?>
+                <?php foreach ($registos_pendentes as $registo): ?>
+                    <div class="utilizador-item">
+                        <div class="utilizador-info">
+                            <h4>
+                                <?= htmlspecialchars($registo['nome_completo']) ?>
+                                <span class="tipo-badge"><?= $registo['tipo'] == 'aluno' ? 'Aluno' : 'Gestor' ?></span>
+                            </h4>
+                            
+                            <div class="utilizador-detalhes">
+                                <span><i class='bx bx-envelope'></i> <?= htmlspecialchars($registo['email_institucional']) ?></span>
+                                <span><i class='bx bx-id-card'></i> <?= htmlspecialchars($registo['numero_matricula']) ?></span>
+                                <span><i class='bx bx-calendar'></i> <?= date('d/m/Y H:i', strtotime($registo['data_registo'])) ?></span>
+                            </div>
+                        </div>
+                        
+                        <div class="action-buttons">
+                            <!-- Botão Aceitar -->
+                            <form method="POST" style="display: inline;">
+                                <input type="hidden" name="id_utilizador" value="<?= $registo['id_utilizador'] ?>">
+                                <input type="hidden" name="acao" value="aceitar">
+                                <button type="submit" class="btn-action btn-accept" title="Aceitar registo">
+                                    <i class='bx bx-check'></i>
+                                </button>
+                            </form>
+                            
+                            <!-- Botão Recusar -->
+                            <form method="POST" style="display: inline;">
+                                <input type="hidden" name="id_utilizador" value="<?= $registo['id_utilizador'] ?>">
+                                <input type="hidden" name="acao" value="recusar">
+                                <button type="submit" class="btn-action btn-reject" title="Recusar registo">
+                                    <i class='bx bx-x'></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            <?php endif; ?>
         </div>
-    </section>
-  </main>
-
-  <!-- Rodapé -->
-  <footer class="rodape">
-    <div class="container">
-      <div class="row">
-        <!-- Sobre -->
-        <div class="col-md-4">
-          <div class="rodape-sobre">
-            <h3>Sobre a <span>EST</span>ransportado</h3>
-            <p>A ESTransportado oferece soluções de transporte eficientes e acessíveis para estudantes, ligando-os com as suas instituições de ensino.</p>
-          </div>
-        </div>
-        <!-- Links Rápidos -->
-        <div class="col-md-4">
-          <div class="rodape-links">
-          </div>
-        </div>
-        <!-- Contacto -->
-        <div class="col-md-4">
-          <div class="rodape-contactos">
-            <h3>Contacte-nos</h3>
-            <ul>
-              <li><strong>Email:</strong> info@estransportado.pt</li>
-              <li><strong>Telefone:</strong> +351 123 456 789</li>
-              <li><strong>Endereço:</strong> Rua da Universidade, 1000 - Castelo Branco, Portugal</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div class="rodape-direitos">
-        <p>&copy; 2025 ESTransportado. Todos os direitos reservados.</p>
-      </div>
     </div>
-  </footer>
+
+    <footer class="rodape">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="rodape-sobre">
+                        <h3>Sobre a <span>EST</span>ransportado</h3>
+                        <p>A ESTransportado oferece soluções de transporte eficientes e acessíveis para estudantes, ligando-os com as suas instituições de ensino.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="rodape-links">
+                        <h3>Links <span>Rápidos</span></h3>
+                            <ul>
+                                <li><a href="gerir-registos.php">Gerir registos</a></li>
+                                <li><a href="gerir-utilizadores.php">Gerir utilizadores</a></li>
+                                <li><a href="gerir-avaliacoes.php">Gerir avaliações</a></li>
+                                <li><a href="ajuda.php">Ajuda</a></li>
+                            </ul>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="rodape-contactos">
+                        <h3>Contacte-nos</h3>
+                        <ul>
+                            <li><strong>Email:</strong> info@estransportado.pt</li>
+                            <li><strong>Telefone:</strong> +351 123 456 789</li>
+                            <li><strong>Endereço:</strong> Rua da Universidade, 1000 - Castelo Branco, Portugal</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="rodape-direitos">
+                <p>&copy; 2025 ESTransportado. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Boxicons JS -->
+    <script src="https://unpkg.com/boxicons@latest/dist/boxicons.js"></script>
+    
+    <script>
+        // Confirmação antes de aceitar/recusar
+        document.querySelectorAll('.btn-accept, .btn-reject').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                const action = this.closest('form').querySelector('[name="acao"]').value;
+                const actionText = action === 'aceitar' ? 'aceitar' : 'recusar';
+                
+                if (!confirm(`Tem certeza que deseja ${actionText} este registo?`)) {
+                    e.preventDefault();
+                }
+            });
+        });
+    </script>
 </body>
 </html>

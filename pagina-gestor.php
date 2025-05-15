@@ -1,3 +1,16 @@
+<?php
+session_start();
+
+// Verificar se o usuário está logado e é admin
+if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'gestor') {
+    header("Location: pagina-login.php");
+    exit();
+}
+
+// Incluir conexão com o banco de dados
+require_once 'basedados/basedados.h';
+?>
+
 <!DOCTYPE html>
 <html lang="pt">
 <head>

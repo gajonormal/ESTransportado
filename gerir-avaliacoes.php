@@ -409,35 +409,42 @@ while ($row = $result->fetch_assoc()) {
     </div>
   </div>
 
-  <footer class="rodape">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-4">
-          <div class="rodape-sobre">
-            <h3>Sobre a <span>EST</span>ransportado</h3>
-            <p>A ESTransportado oferece soluções de transporte eficientes e acessíveis para estudantes, ligando-os com as suas instituições de ensino.</p>
-          </div>
+ <footer class="rodape">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="rodape-sobre">
+                        <h3>Sobre a <span>EST</span>ransportado</h3>
+                        <p>A ESTransportado oferece soluções de transporte eficientes e acessíveis para estudantes, ligando-os com as suas instituições de ensino.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="rodape-links">
+                        <h3>Links <span>Rápidos</span></h3>
+                            <ul>
+                                <li><a href="gerir-registos.php">Gerir registos</a></li>
+                                <li><a href="gerir-utilizadores.php">Gerir utilizadores</a></li>
+                                <li><a href="gerir-avaliacoes.php">Gerir avaliações</a></li>
+                                <li><a href="ajuda.php">Ajuda</a></li>
+                            </ul>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="rodape-contactos">
+                        <h3>Contacte-nos</h3>
+                        <ul>
+                            <li><strong>Email:</strong> info@estransportado.pt</li>
+                            <li><strong>Telefone:</strong> +351 123 456 789</li>
+                            <li><strong>Endereço:</strong> Rua da Universidade, 1000 - Castelo Branco, Portugal</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="rodape-direitos">
+                <p>&copy; 2025 ESTransportado. Todos os direitos reservados.</p>
+            </div>
         </div>
-        <div class="col-md-4">
-          <div class="rodape-links">
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="rodape-contactos">
-            <h3>Contacte-nos</h3>
-            <ul>
-              <li><strong>Email:</strong> info@estransportado.pt</li>
-              <li><strong>Telefone:</strong> +351 123 456 789</li>
-              <li><strong>Endereço:</strong> Rua da Universidade, 1000 - Castelo Branco, Portugal</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div class="rodape-direitos">
-        <p>&copy; 2025 ESTransportado. Todos os direitos reservados.</p>
-      </div>
-    </div>
-  </footer>
+    </footer>
 
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

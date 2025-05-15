@@ -267,11 +267,12 @@ while ($row = $result->fetch_assoc()) {
                 <div class="col-md-4">
                     <div class="rodape-links">
                         <h3>Links <span>Rápidos</span></h3>
-                        <ul>
-                            <li><a href="pagina-admin.php">Dashboard</a></li>
-                            <li><a href="gerir-utilizadores.php">Gerir Utilizadores</a></li>
-                            <li><a href="gerir-avaliacoes.php">Gerir Avaliações</a></li>
-                        </ul>
+                            <ul>
+                                <li><a href="gerir-registos.php">Gerir registos</a></li>
+                                <li><a href="gerir-utilizadores.php">Gerir utilizadores</a></li>
+                                <li><a href="gerir-avaliacoes.php">Gerir avaliações</a></li>
+                                <li><a href="ajuda.php">Ajuda</a></li>
+                            </ul>
                     </div>
                 </div>
                 <div class="col-md-4">

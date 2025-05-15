@@ -1,9 +1,32 @@
 <?php
+session_start();
 
+// Verificar se o usuário está logado
+if (!isset($_SESSION['user_id'])) {
+    header("Location: pagina-login.php");
+    exit();
+}
 
+// Determinar a página inicial com base no tipo de usuário
+$pagina_inicial = 'pagina-login.php'; // padrão
 
-
+if (isset($_SESSION['user_type'])) {
+    switch ($_SESSION['user_type']) {
+        case 'admin':
+            $pagina_inicial = 'pagina-admin.php';
+            break;
+        case 'gestor':
+            $pagina_inicial = 'pagina-gestor.php';
+            break;
+        case 'aluno':
+            $pagina_inicial = 'pagina-aluno.php';
+            break;
+        default:
+            $pagina_inicial = 'pagina-login.php';
+    }
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -19,7 +42,7 @@
 </head>
 
 <header>
-    <a href="pagina-admin.html" class="logo">
+    <a href="<?php echo $pagina_inicial; ?>" class="logo">
         <img src="imagens/logo.png" alt="ESTransportado">
     </a>
 </header>
