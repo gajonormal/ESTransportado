@@ -22,11 +22,10 @@
     </a>
 
     <ul class="navbar">
-      <li><a href="gerir-registos.html">Gerir registos</a></li>
-      <li><a href="gerir-gestores.html">Gerir gestores</a></li>
-      <li><a href="gerir-Alunos.html">Gerir alunos</a></li>
-      <li><a href="gerir-avaliacoes.html">Gerir avaliações</a></li>
-      <li><a href="ajuda.html">Ajuda</a></li>
+      <li><a href="gerir-registos.php">Gerir registos</a></li>
+      <li><a href="gerir-utilizadores.php">Gerir Utilizadores</a></li>
+      <li><a href="gerir-avaliacoes.php">Gerir avaliações</a></li>
+      <li><a href="ajuda.php">Ajuda</a></li>
     
 
       

@@ -40,21 +40,25 @@ $data_nascimento_formatada = !empty($user['data_nascimento']) ? date('Y-m-d', st
 </head>
 <body>
     <header>
-        <a href="pagina-inicial.php" class="logo">
-          <img src="imagens/logo.png" alt="ESTransportado">
-        </a>
+        <a href="<?php
+        switch($_SESSION['user_type']) {
+            case 'admin':
+                echo 'pagina-admin.php'; // Página principal do admin
+                break;
+            case 'gestor':
+                echo 'pagina-gestor.php'; // Página principal do gestor
+                break;
+            case 'aluno':
+            default:
+                echo 'pagina-aluno.php'; // Página principal do aluno
+        }
+    ?>" class="logo">
+        <img src="imagens/logo.png" alt="ESTransportado">
+    </a>
     
         <ul class="navbar">
           <?php if ($_SESSION['user_type'] === 'aluno'): ?>
             <li><a href="historico-aluno.php">Histórico</a></li>
-          <?php endif; ?>
-          
-          <?php if ($_SESSION['user_type'] === 'gestor'): ?>
-            <li><a href="gestao-viagens.php">Gestão de Viagens</a></li>
-          <?php endif; ?>
-          
-          <?php if ($_SESSION['user_type'] === 'admin'): ?>
-            <li><a href="gestao-utilizadores.php">Gestão de Utilizadores</a></li>
           <?php endif; ?>
         </ul>
     
