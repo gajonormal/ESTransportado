@@ -152,6 +152,16 @@ CREATE TABLE Estatisticas (
     horarios_pico TEXT
 );
 
+-- Tabela de Tentativas de Login (para segurança)
+CREATE TABLE tentativas_login (
+    id_tentativa INT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(255) NOT NULL,
+    ip_address VARCHAR(45) NOT NULL,
+    user_agent VARCHAR(255) NULL,
+    sucesso TINYINT(1) NOT NULL DEFAULT 0,
+    data_tentativa TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+
 
 -- Inserir dados de teste para Utilizadores
 INSERT INTO Utilizadores (email_institucional, password_hash, nome_completo, data_nascimento, numero_matricula, sexo, tipo) VALUES
