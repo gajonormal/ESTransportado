@@ -1,14 +1,8 @@
 <?php
 session_start();
 
-// Verificar se o usuário está logado
-if (!isset($_SESSION['user_id'])) {
-    header("Location: pagina-login.php");
-    exit();
-}
-
-// Determinar a página inicial com base no tipo de usuário
-$pagina_inicial = 'pagina-login.php'; // padrão
+// Determinar a página inicial com base no tipo de usuário (se estiver logado)
+$pagina_inicial = 'pagina-inicial.php'; // padrão para não logados
 
 if (isset($_SESSION['user_type'])) {
     switch ($_SESSION['user_type']) {
@@ -21,8 +15,6 @@ if (isset($_SESSION['user_type'])) {
         case 'aluno':
             $pagina_inicial = 'pagina-aluno.php';
             break;
-        default:
-            $pagina_inicial = 'pagina-login.php';
     }
 }
 ?>
@@ -33,108 +25,17 @@ if (isset($_SESSION['user_type'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ESTransportado - Ajuda e Suporte</title>
-
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-
     <link rel="stylesheet" href="style.css">
-
     <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
 </head>
 
-<header>
-    <a href="<?php echo $pagina_inicial; ?>" class="logo">
-        <img src="imagens/logo.png" alt="ESTransportado">
-    </a>
-</header>
-
 <body>
-    <style>
-        body {
-            font-size: 16px; /* Aumentei o tamanho da fonte base */
-        }
-        .container {
-            max-width: 960px; /* Largura máxima para um aspeto mais profissional */
-            margin: 30px auto; /* Adicionei margem superior e inferior */
-            padding: 20px;
-        }
-        h1 {
-            color: #c2ff22;
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .ajuda-item {
-            background: #333;
-            padding: 25px; /* Aumentei o preenchimento */
-            border-radius: 12px; /* Bordas mais arredondadas */
-            margin-bottom: 25px;
-            color: #eee;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Adicionei uma sombra suave */
-        }
-        .ajuda-item h4 {
-            color: #c2ff22;
-            margin-top: 0;
-            margin-bottom: 15px;
-            font-size: 1.5em; /* Aumentei o tamanho da fonte do título */
-            border-bottom: 1px solid #555; /* Adicionei uma linha abaixo do título */
-            padding-bottom: 10px;
-        }
-        .ajuda-item p {
-            margin-bottom: 15px;
-            font-size: 1.1em; /* Aumentei o tamanho da fonte do parágrafo */
-            line-height: 1.6; /* Melhorei a legibilidade */
-            color: #ddd;
-        }
-        .ajuda-item strong {
-            color: #c2ff22;
-            font-weight: bold;
-        }
-        .rodape {
-            background-color: #222;
-            color: white;
-            padding: 30px 0; /* Aumentei o preenchimento */
-            text-align: center;
-            width: 100%;
-            margin-top: 40px; /* Adicionei margem superior */
-        }
-        .rodape a {
-            color: #c2ff22;
-            text-decoration: none;
-        }
-        .rodape .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        .rodape-sobre h3,
-        .rodape-links h3,
-        .rodape-contactos h3 {
-            color: #c2ff22;
-            margin-bottom: 15px;
-            font-size: 1.2em;
-        }
-        .rodape-links ul,
-        .rodape-contactos ul {
-            list-style: none;
-            padding: 0;
-        }
-        .rodape-links li a,
-        .rodape-contactos li {
-            color: #eee;
-            text-decoration: none;
-            margin-bottom: 10px;
-            display: block;
-            font-size: 1em;
-        }
-        .rodape-contactos li strong {
-            color: #c2ff22;
-            font-weight: bold;
-        }
-        .rodape-direitos {
-            margin-top: 20px;
-            font-size: 0.9em;
-            color: #999;
-        }
-    </style>
+    <header>
+        <a href="<?php echo $pagina_inicial; ?>" class="logo">
+            <img src="imagens/logo.png" alt="ESTransportado">
+        </a>
+    </header>
 
     <div class="container">
         <h1>Ajuda e Suporte</h1>
@@ -166,4 +67,75 @@ if (isset($_SESSION['user_type'])) {
         </div>
     </div>
 
-   
+    <style>
+        body {
+            font-size: 16px;
+        }
+        .container {
+            max-width: 960px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #c2ff22;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .ajuda-item {
+            background: #333;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            color: #eee;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .ajuda-item h4 {
+            color: #c2ff22;
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+            border-bottom: 1px solid #555;
+            padding-bottom: 10px;
+        }
+        .ajuda-item p {
+            margin-bottom: 15px;
+            font-size: 1.1em;
+            line-height: 1.6;
+            color: #ddd;
+        }
+        .ajuda-item strong {
+            color: #c2ff22;
+            font-weight: bold;
+        }
+        .rodape {
+            background-color: #222;
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+            width: 100%;
+            margin-top: 40px;
+        }
+        .rodape a {
+            color: #c2ff22;
+            text-decoration: none;
+        }
+        .login-link {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+        .login-link a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 15px;
+            background-color: #c2ff22;
+            border-radius: 5px;
+            color: #333;
+            font-weight: bold;
+        }
+        .login-link a:hover {
+            background-color: #a8e01e;
+        }
+    </style>
+</body>
+</html>

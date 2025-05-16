@@ -15,7 +15,7 @@ if (isset($_SESSION['user_id'])) {
             header("Location: pagina-aluno.php");
             break;
         default:
-            header("Location: pagina_inicial.html");
+            header("Location: pagina-inicial.php");
     }
     exit();
 }
@@ -45,7 +45,7 @@ unset($_SESSION['success']);
 </head>
 <body class="pagina-login">
   <header>
-    <a href="pagina_inicial.html" class="logo">
+    <a href="pagina-inicial.php" class="logo">
       <img src="imagens/logo.png" alt="ESTransportado">
     </a>
   </header>
@@ -74,7 +74,6 @@ unset($_SESSION['success']);
         </div>
 
         <div class="opcoes">
-          <label><input type="checkbox" name="remember"> Lembrar-me</label>
           <a href="esquece-password.php">Esqueceu-se da password?</a>
         </div>
         <button type="submit" class="btn btn-primary" id="btn-login">Entrar</button>
