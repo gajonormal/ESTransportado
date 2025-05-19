@@ -100,12 +100,9 @@ if ($result) {
       <ul class="navbar">
         <li><a href="as-minhas-reservas.html">As minhas reservas</a></li>
         <li><a href="consultar-horarios.html">Consultar horarios</a></li>
-        <li><a href="gerir-avaliacoes-aluno.php">As minhas avaliações</a></li>
-
-        </li>
       
 
-        <li><a href="ajuda.html">Ajuda</a></li>
+        <li><a href="ajuda.php">Ajuda</a></li>
         
         </div>
 
