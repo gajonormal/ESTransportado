@@ -10,6 +10,15 @@ require_once 'basedados/basedados.h';
 
 $user_id = $_SESSION['user_id'];
 
+// Obter filtros únicos (origens e destinos)
+$filtros_query = "SELECT DISTINCT origem, destino FROM Viagens";
+$filtros_result = $conn->query($filtros_query);
+$filtros = $filtros_result->fetch_all(MYSQLI_ASSOC);
+
+// Aplicar filtro se existir
+$filtro_origem = $_GET['origem'] ?? null;
+$filtro_destino = $_GET['destino'] ?? null;
+
 $query = "SELECT r.*, v.origem, v.destino, 
                  TIME_FORMAT(v.data_partida, '%H:%i') as hora_partida, 
                  TIME_FORMAT(v.data_chegada, '%H:%i') as hora_chegada, 
@@ -19,8 +28,22 @@ $query = "SELECT r.*, v.origem, v.destino,
           JOIN Passageiros p ON r.id_passageiro = p.id_passageiro
           WHERE p.id_utilizador = ? AND r.estado != 'cancelado'";
 
+$params = [$user_id];
+$types = "i";
+
+if ($filtro_origem) {
+  $query .= " AND v.origem = ?";
+  $types .= "s";
+  $params[] = $filtro_origem;
+}
+if ($filtro_destino) {
+  $query .= " AND v.destino = ?";
+  $types .= "s";
+  $params[] = $filtro_destino;
+}
+
 $stmt = $conn->prepare($query);
-$stmt->bind_param("i", $user_id);
+$stmt->bind_param($types, ...$params);
 $stmt->execute();
 $result = $stmt->get_result();
 $reservas = $result->fetch_all(MYSQLI_ASSOC);
@@ -31,12 +54,9 @@ $reservas = $result->fetch_all(MYSQLI_ASSOC);
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ESTransportado</title>
-
-  <!-- BOOTSTRAP 5 CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
-
   <style>
     .container {
       max-width: 800px;
@@ -67,6 +87,9 @@ $reservas = $result->fetch_all(MYSQLI_ASSOC);
       font-weight: bold;
       color: #000;
     }
+    .form-select {
+      margin-bottom: 15px;
+    }
   </style>
 </head>
 <body>
@@ -78,10 +101,30 @@ $reservas = $result->fetch_all(MYSQLI_ASSOC);
 
   <div class="container">
     <h1>As minhas reservas</h1>
+    <form method="GET" class="mb-3">
+      <div class="row">
+        <div class="col-md-6">
+          <select name="origem" class="form-select">
+            <option value="">Filtrar por origem</option>
+            <?php foreach ($filtros as $f): if (!empty($f['origem'])): ?>
+              <option value="<?= htmlspecialchars($f['origem']) ?>" <?= $filtro_origem === $f['origem'] ? 'selected' : '' ?>><?= htmlspecialchars($f['origem']) ?></option>
+            <?php endif; endforeach; ?>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <select name="destino" class="form-select">
+            <option value="">Filtrar por destino</option>
+            <?php foreach ($filtros as $f): if (!empty($f['destino'])): ?>
+              <option value="<?= htmlspecialchars($f['destino']) ?>" <?= $filtro_destino === $f['destino'] ? 'selected' : '' ?>><?= htmlspecialchars($f['destino']) ?></option>
+            <?php endif; endforeach; ?>
+          </select>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary mt-2">Aplicar Filtros</button>
+    </form>
   </div>
 
   <div class="container">
-    <a href="#" class="btn btn-primary mb-3" id="btn-lermais">Filtrar</a>
     <div class="results-section">
       <?php if (empty($reservas)): ?>
         <div class="text-white">Não existem reservas ativas.</div>
