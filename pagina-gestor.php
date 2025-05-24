@@ -30,12 +30,12 @@ require_once 'basedados/basedados.h';
 
 <body>
   <header>
-    <a href="#.html" class="logo">
+    <a href=".html" class="logo">
       <img src="imagens/logo.png" alt="ESTransportado">
     </a>
 
     <ul class="navbar">
-      <li><a href="gerir-avaliacoes.html"> Gerir  Avaliações </a></li>
+      <li><a href="gerir-viagens.php"> Gerir  Viagens </a></li>
       <li><a href="pagina-gerir-Utilizadores.php">Gerir Utilizadores</a></li>
      
       
