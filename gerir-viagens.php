@@ -158,7 +158,7 @@ $result = $stmt->get_result();
     .card-viagem    { background:#222; border-radius:15px; padding:25px 30px; margin-bottom:25px; color:#fff; }
     .card-viagem h5 { color:#c2ff22; margin-bottom:15px; }
     .badge-estado   { font-size:.8rem; }
-    header { background:#c2ff22; padding:15px 40px; display:flex; align-items:center; justify-content:space-between; }
+    header { background:#c2ff22; padding:3px 40px; display:flex; align-items:center; justify-content:space-between; }
     .navbar { list-style:none; display:flex; gap:30px; margin:0; padding:0; }
     .navbar li a { display:inline-block; padding:5px 10px; color:#000; font-weight:600; border-radius:5px; transition:background .2s,color .2s; }
     .navbar li a:hover { background:#000; color:#c2ff22; }
@@ -177,7 +177,7 @@ $result = $stmt->get_result();
 
     <ul class="navbar">
       <li><a href="gerir-viagens.php"> Gerir  Viagens </a></li>
-      <li><a href="pagina-gerir-Utilizadores.php">Gerir Utilizadores</a></li>
+      <li><a href="gerir-reservas.php">Gerir Reservas</a></li>
      
       
     

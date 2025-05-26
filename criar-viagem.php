@@ -189,7 +189,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </a>
     <ul class="navbar">
       <li><a href="gerir-viagens.php">Gerir Viagens</a></li>
-      <li><a href="pagina-gerir-Utilizadores.php">Gerir Utilizadores</a></li>
+      <li><a href="gerir-reservas.php">Gerir Reservas</a></li>
       <li><a href="perfil.php" id="btn-entrar">Perfil</a></li>
     </ul>
   </header>
