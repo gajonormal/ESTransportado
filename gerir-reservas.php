@@ -90,45 +90,11 @@ $res = $stmt->get_result();
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>ESTransportado – Gerir Reservas</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+   <link rel="stylesheet" href="style.css">
   <link href="https://unpkg.com/boxicons@latest/css/boxicons.min.css" rel="stylesheet">
   <style>
     /* Navbar maior */
-    header {
-      background: #c2ff22;
-      padding: 15px 40px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    header .logo img { height: 40px; }
-    .navbar {
-      list-style: none;
-      display: flex;
-      gap: 25px;
-      margin: 0;
-      padding: 0;
-    }
-    .navbar li a {
-      padding: 6px 12px;
-      color: #000;
-      font-weight: 600;
-      border-radius: 5px;
-      text-decoration: none;
-      transition: background .2s, color .2s;
-      font-size: 1rem;
-    }
-    .navbar li a:hover {
-      background: #000;
-      color: #c2ff22;
-    }
-    #btn-entrar {
-      background: #000 !important;
-      color: #c2ff22 !important;
-      padding: 8px 20px;
-      border-radius: 20px;
-      text-decoration: none;
-      font-weight: 600;
-    }
+    
 
     body {
       background: #121212;
@@ -248,11 +214,21 @@ $res = $stmt->get_result();
     <a href="pagina-gestor.php" class="logo">
       <img src="imagens/logo.png" alt="ESTransportado">
     </a>
+
     <ul class="navbar">
-      <li><a href="gerir-viagens.php">Gerir Viagens</a></li>
+      <li><a href="gerir-viagens.php"> Gerir  Viagens </a></li>
       <li><a href="gerir-reservas.php">Gerir Reservas</a></li>
-      <li><a href="perfil.php" id="btn-entrar">Perfil</a></li>
-    </ul>
+      <li><a href="gerir-propostas.php">Gerir Propostas</a></li>
+     
+      
+    
+
+      
+      
+      </div>
+
+
+    <a href="perfil.php" class="btn btn-primary" id="btn-entrar">Perfil</a>
   </header>
 
   <div class="main-container">

@@ -2,7 +2,8 @@
 session_start();
 // Apenas gestor
 if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'gestor') {
-    header('Location: pagina-login.php'); exit();
+    header('Location: pagina-login.php');
+    exit();
 }
 
 // Conexão com BD
@@ -34,7 +35,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         );
         $stmt->execute();
         $stmt->close();
-        header('Location: gerir-viagens.php'); exit();
+        header('Location: gerir-viagens.php');
+        exit();
     } 
     elseif ($action === 'edit') {
         $stmt = $mysqli->prepare("
@@ -61,7 +63,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         );
         $stmt->execute();
         $stmt->close();
-        header('Location: gerir-viagens.php'); exit();
+        header('Location: gerir-viagens.php');
+        exit();
     } 
     elseif ($action === 'delete') {
         $id = (int)$_POST['id_viagem'];
@@ -82,7 +85,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } catch (\Exception $e) {
             $mysqli->rollback();
         }
-        header('Location: gerir-viagens.php'); exit();
+        header('Location: gerir-viagens.php');
+        exit();
     }
 }
 
@@ -92,24 +96,24 @@ $params = [];
 $types  = '';
 
 if (!empty($_GET['origem'])) {
-    $where[]   = 'v.origem LIKE ?';
-    $params[]  = '%'.$_GET['origem'].'%';
-    $types    .= 's';
+    $where[]  = 'v.origem LIKE ?';
+    $params[] = '%'.$_GET['origem'].'%';
+    $types   .= 's';
 }
 if (!empty($_GET['destino'])) {
-    $where[]   = 'v.destino LIKE ?';
-    $params[]  = '%'.$_GET['destino'].'%';
-    $types    .= 's';
+    $where[]  = 'v.destino LIKE ?';
+    $params[] = '%'.$_GET['destino'].'%';
+    $types   .= 's';
 }
 if (!empty($_GET['data_partida'])) {
-    $where[]   = 'DATE(v.data_partida) = ?';
-    $params[]  = $_GET['data_partida'];
-    $types    .= 's';
+    $where[]  = 'DATE(v.data_partida) = ?';
+    $params[] = $_GET['data_partida'];
+    $types   .= 's';
 }
 if (!empty($_GET['tipo'])) {
-    $where[]   = 'v.tipo = ?';
-    $params[]  = $_GET['tipo'];
-    $types    .= 's';
+    $where[]  = 'v.tipo = ?';
+    $params[] = $_GET['tipo'];
+    $types   .= 's';
 }
 
 $sql = "
@@ -125,7 +129,7 @@ $sql = "
       v.tipo,
       v.estado
     FROM Viagens v
-    ".(count($where) ? 'WHERE '.implode(' AND ',$where) : '')."
+    " . (count($where) ? 'WHERE '.implode(' AND ',$where) : '') . "
     ORDER BY v.data_partida
 ";
 $stmt = $mysqli->prepare($sql);
@@ -162,31 +166,35 @@ $result = $stmt->get_result();
     .navbar { list-style:none; display:flex; gap:30px; margin:0; padding:0; }
     .navbar li a { display:inline-block; padding:5px 10px; color:#000; font-weight:600; border-radius:5px; transition:background .2s,color .2s; }
     .navbar li a:hover { background:#000; color:#c2ff22; }
+    .navbar li a.active { background: none !important; color: #c2ff22 !important; }
     #btn-entrar { background:#000; color:#c2ff22 !important; padding:8px 20px; border-radius:20px; }
+
+    /* Destaque do modal de edição */
+    .modal-content {
+      background: #222 !important;
+      color: #fff !important;
+      border-radius: 15px;
+    }
+    .modal-body .form-control,
+    .modal-body .form-select {
+      background: #333 !important;
+      color: #fff !important;
+      border: 1px solid #555 !important;
+    }
+    .modal-body .form-label {
+      color: #c2ff22 !important;
+    }
   </style>
 </head>
 <body style="background:#121212;">
 
-
   <header>
-    <a href="pagina-gestor.php" class="logo">
-      <img src="imagens/logo.png" 
-      
-      alt="ESTransportado">
-    </a>
-
+    <a href="pagina-gestor.php" class="logo"><img src="imagens/logo.png" alt="ESTransportado"></a>
     <ul class="navbar">
       <li><a href="gerir-viagens.php"> Gerir  Viagens </a></li>
       <li><a href="gerir-reservas.php">Gerir Reservas</a></li>
-     
-      
-    
-
-      
-      
-      </div>
-
-
+      <li><a href="gerir-propostas.php">Gerir Propostas</a></li>
+    </ul>
     <a href="perfil.php" class="btn btn-primary" id="btn-entrar">Perfil</a>
   </header>
 
@@ -209,7 +217,7 @@ $result = $stmt->get_result();
       </form>
 
       <?php if ($result->num_rows === 0): ?>
-        <div class="no-registros">Nenhuma viagem encontrada.</div>
+        <div class="no-registros" style="color:#fff;">Nenhuma viagem encontrada.</div>
       <?php else: ?>
         <?php while ($v = $result->fetch_assoc()): ?>
           <div class="card-viagem">
