@@ -135,10 +135,10 @@ $viagens = mysqli_fetch_all($result, MYSQLI_ASSOC);
     </a>
 
     <ul class="navbar">
-      <li><a href="serviços.html">Serviços</a></li>
-      <li><a href="sobrenos.html">Sobre nós</a></li>
-      <li><a href="contactos.html">Contactos</a></li>
-      <li><a href="ajuda.html">Ajuda</a></li>
+      <li><a href="">Serviços</a></li>
+      <li><a href="">Sobre nós</a></li>
+      <li><a href="">Contactos</a></li>
+      <li><a href="ajuda.php">Ajuda</a></li>
     </ul>
     
     <a href="selecionarutilizador.html" class="btn btn-primary" id="btn-entrar">Entrar</a>
