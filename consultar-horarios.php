@@ -216,7 +216,7 @@ $viagens = mysqli_fetch_all($result, MYSQLI_ASSOC);
               Vagas disponíveis: <?php echo $vagas_disponiveis; ?>/<?php echo $viagem['lotacao_maxima']; ?>
             </p>
             
-            <form method="POST" action="reservar_viagem.php">
+            <form method="POST" action="concluir-reserva.html">
               <input type="hidden" name="id_viagem" value="<?php echo $viagem['id_viagem']; ?>">
               <button type="submit" class="btn-reservar" <?php echo $vagas_disponiveis <= 0 ? 'disabled' : ''; ?>>
                 <?php echo $vagas_disponiveis <= 0 ? 'LOTADO' : 'RESERVAR'; ?>
