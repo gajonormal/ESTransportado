@@ -93,7 +93,7 @@ if ($result) {
 
 <body>
     <header>
-      <a href="#.html" class="logo">
+      <a href="pagina-aluno.php" class="logo">
         <img src="imagens/logo.png" alt="ESTransportado">
       </a>
 
@@ -173,7 +173,7 @@ if ($result) {
               <div class="detail-box">
                 <h3>Transportes públicos</h3>
                 <p>Texto de exemplo sobre transporte público.</p>
-                <a href="ler_mais.html" class="btn btn-primary" id="btn-lermais">Ler mais</a>
+                <a href="consultar-horarios.php" class="btn btn-primary" id="btn-lermais">Ler mais</a>
               </div>
             </div>
           </div>
@@ -186,7 +186,7 @@ if ($result) {
               <div class="detail-box">
                 <h3>Transportes privados</h3>
                 <p>Texto de exemplo sobre transporte privado.</p>
-                <a href="ler_mais.html" class="btn btn-primary" id="btn-lermais">Ler mais</a>
+                <a href="consultar-horarios.php" class="btn btn-primary" id="btn-lermais">Ler mais</a>
               </div>
             </div>
           </div>
