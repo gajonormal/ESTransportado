@@ -130,7 +130,7 @@ $viagens = mysqli_fetch_all($result, MYSQLI_ASSOC);
 </head>
 <body>
   <header>
-    <a href="pagina_inicial.html" class="logo">
+    <a href="pagina-aluno.php" class="logo">
       <img src="imagens/logo.png" alt="ESTransportado">
     </a>
 
@@ -141,7 +141,7 @@ $viagens = mysqli_fetch_all($result, MYSQLI_ASSOC);
       <li><a href="ajuda.php">Ajuda</a></li>
     </ul>
     
-    <a href="selecionarutilizador.html" class="btn btn-primary" id="btn-entrar">Entrar</a>
+    <a href="perfil.php" class="btn btn-primary" id="btn-entrar">Perfil</a>
   </header>
 
   <div class="container">
