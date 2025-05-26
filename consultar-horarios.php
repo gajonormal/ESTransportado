@@ -10,11 +10,22 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'aluno') {
 // Incluir conexão com o banco de dados
 require_once 'basedados/basedados.h';
 
-// Consulta para obter todas as viagens ativas
-$query = "SELECT * FROM Viagens WHERE estado = 'ativo' ORDER BY estado ASC";
+// Data atual para comparar
+$data_atual = date('Y-m-d H:i:s');
+
+// Consulta para obter apenas viagens ativas e com data futura
+$query = "SELECT *, 
+          TIMESTAMPDIFF(MINUTE, NOW(), data_partida) AS minutos_restantes
+          FROM Viagens 
+          WHERE estado = 'ativo' 
+          AND data_partida > NOW()
+          ORDER BY data_partida ASC";
+
 $result = mysqli_query($conn, $query);
 $viagens = mysqli_fetch_all($result, MYSQLI_ASSOC);
 ?>
+
+
 
 
 <!DOCTYPE html>
@@ -142,23 +153,21 @@ $viagens = mysqli_fetch_all($result, MYSQLI_ASSOC);
     </ul>
     
     <a href="perfil.php" class="btn btn-primary" id="btn-entrar">Perfil</a>
-  </header>
-
+</header>
   <div class="container">
-    <h1 class="page-title">Todas as Viagens Ativas</h1>
+    <h1 class="page-title">Viagens Ativas Disponíveis</h1>
 
     <div class="results-section">
       <?php if (empty($viagens)): ?>
         <div class="no-results">
-          <p>Nenhuma viagem ativa disponível no momento.</p>
+          <p>Não existem viagens ativas disponíveis no momento.</p>
+          <p>Por favor, verifique mais tarde ou crie uma nova proposta de transporte.</p>
         </div>
       <?php else: ?>
         <?php foreach ($viagens as $viagem): 
           // Formatar datas e horas
           $data_partida = date('d/m/Y H:i', strtotime($viagem['data_partida']));
-          $data_chegada = date('d/m/Y H:i', strtotime($viagem['data_chegada']));
-          $hora_partida = date('H:i', strtotime($viagem['data_partida']));
-          $hora_chegada = date('H:i', strtotime($viagem['data_chegada']));
+          $data_chegada = date('H:i', strtotime($viagem['data_chegada']));
           
           // Calcular duração
           $partida = new DateTime($viagem['data_partida']);
@@ -169,12 +178,17 @@ $viagens = mysqli_fetch_all($result, MYSQLI_ASSOC);
           // Verificar lotação
           $vagas_disponiveis = $viagem['lotacao_maxima'] - $viagem['lotacao_atual'];
           
-          // Verificar se a viagem já ocorreu
-          $data_atual = new DateTime();
-          $viagem_ocorreu = ($partida < $data_atual);
+          // Verificar se a viagem está próxima (menos de 2 horas)
+          $minutos_restantes = $viagem['minutos_restantes'];
+          $viagem_proxima = $minutos_restantes < 120; // 2 horas = 120 minutos
         ?>
-          <div class="viagem">
-            <span class="tipo-transporte"><?php echo $viagem['tipo'] === 'publico' ? 'Público' : 'Privado'; ?></span>
+          <div class="viagem <?php echo $viagem_proxima ? 'viagem-proxima' : ''; ?>">
+            <span class="tipo-transporte">
+              <?php echo $viagem['tipo'] === 'publico' ? 'Público' : 'Privado'; ?>
+              <?php if ($viagem_proxima): ?>
+                <span class="badge-proxima">PARTIDA PRÓXIMA</span>
+              <?php endif; ?>
+            </span>
             
             <div class="viagem-rota">
               <?php echo htmlspecialchars($viagem['origem']); ?> → <?php echo htmlspecialchars($viagem['destino']); ?>
@@ -200,24 +214,12 @@ $viagens = mysqli_fetch_all($result, MYSQLI_ASSOC);
             
             <p class="lotacao">
               Vagas disponíveis: <?php echo $vagas_disponiveis; ?>/<?php echo $viagem['lotacao_maxima']; ?>
-              <?php if ($viagem_ocorreu): ?>
-                <span style="color: #ff5555;"> (Viagem já ocorreu)</span>
-              <?php endif; ?>
             </p>
             
-            <form method="POST" action="concluir-reserva.html">
+            <form method="POST" action="reservar_viagem.php">
               <input type="hidden" name="id_viagem" value="<?php echo $viagem['id_viagem']; ?>">
-              <button type="submit" class="btn-reservar" 
-                <?php echo ($vagas_disponiveis <= 0 || $viagem_ocorreu) ? 'disabled' : ''; ?>>
-                <?php 
-                  if ($viagem_ocorreu) {
-                    echo 'VIAGEM REALIZADA';
-                  } elseif ($vagas_disponiveis <= 0) {
-                    echo 'LOTADO';
-                  } else {
-                    echo 'RESERVAR';
-                  }
-                ?>
+              <button type="submit" class="btn-reservar" <?php echo $vagas_disponiveis <= 0 ? 'disabled' : ''; ?>>
+                <?php echo $vagas_disponiveis <= 0 ? 'LOTADO' : 'RESERVAR'; ?>
               </button>
             </form>
           </div>
@@ -226,6 +228,7 @@ $viagens = mysqli_fetch_all($result, MYSQLI_ASSOC);
     </div>
   </div>
 </body>
+
 
 <!-- Rodapé -->
 <footer class="rodape">
