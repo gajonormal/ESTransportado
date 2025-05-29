@@ -58,6 +58,21 @@ $reservas = $result->fetch_all(MYSQLI_ASSOC);
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
   <style>
+    .btn-cancelar-reserva {
+    margin-top: 10px;
+    background: #c2ff22;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    color: black;
+    padding: 8px 16px;
+    cursor: pointer;
+}
+
+.btn-cancelar-reserva:hover {
+    background: #c2ff22;
+    color: black;
+}
     .container {
       max-width: 800px;
       margin: 30px auto;
@@ -134,7 +149,7 @@ $reservas = $result->fetch_all(MYSQLI_ASSOC);
             <p><strong><?= $r['hora_partida'] ?></strong> - <?= htmlspecialchars($r['origem']) ?> → <strong><?= $r['hora_chegada'] ?></strong> - <?= htmlspecialchars($r['destino']) ?></p>
             <p>Duração: <?= $r['duracao'] ?>h | Preço: €<?= number_format($r['preco_total'], 2) ?></p>
             <a href="editar-reserva.php?id=<?= $r['id_reserva'] ?>" class="btn">Editar</a>
-            <a href="cancelar-reserva.php?id=<?= $r['id_reserva'] ?>" class="btn btn-danger">Cancelar reserva</a>
+            <button class="btn btn-cancelar-reserva" data-id-reserva="<?= $r['id_reserva'] ?>" style="background-color: #c2ff22; color: black ;">Cancelar reserva</button>
           </div>
         <?php endforeach; ?>
       <?php endif; ?>
@@ -166,5 +181,59 @@ $reservas = $result->fetch_all(MYSQLI_ASSOC);
       </div>
     </div>
   </footer>
+  <script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Adicionar evento de clique aos botões de cancelar
+    document.querySelectorAll('.btn-cancelar-reserva').forEach(button => {
+        button.addEventListener('click', function() {
+            const idReserva = this.getAttribute('data-id-reserva');
+            if (!idReserva) return;
+            
+            if (!confirm('Tem certeza que deseja cancelar esta reserva?')) {
+                return;
+            }
+            
+            // Mostrar loader
+            const originalText = this.innerHTML;
+            this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Cancelando...';
+            this.disabled = true;
+            
+            // Fazer a chamada AJAX
+            fetch('cancelar-reserva.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'id_reserva=' + encodeURIComponent(idReserva)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Encontrar e remover o elemento da reserva
+                    const reservaItem = this.closest('.viagem');
+                    if (reservaItem) {
+                        reservaItem.remove();
+                    }
+                    
+                    // Mostrar mensagem de sucesso (opcional)
+                    alert('Reserva cancelada com sucesso!');
+                } else {
+                    alert('Erro ao cancelar reserva: ' + (data.error || 'Erro desconhecido'));
+                    // Restaurar botão
+                    this.innerHTML = originalText;
+                    this.disabled = false;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Ocorreu um erro ao comunicar com o servidor');
+                // Restaurar botão
+                this.innerHTML = originalText;
+                this.disabled = false;
+            });
+        });
+    });
+});
+</script>
 </body>
 </html>
