@@ -55,6 +55,25 @@ $result = $stmt->get_result();
 while ($row = $result->fetch_assoc()) {
     $avaliacoes[] = $row;
 }
+
+// Obter avaliações recebidas pelo aluno
+$avaliacoes_recebidas = [];
+$stmt = $conn->prepare("
+    SELECT a.*, v.origem, v.destino, v.data_partida, u.nome_completo as nome_avaliador
+    FROM Avaliacoes a 
+    JOIN Viagens v ON a.id_viagem = v.id_viagem 
+    JOIN Utilizadores u ON a.id_avaliador = u.id_utilizador
+    JOIN Reservas r ON v.id_viagem = r.id_viagem
+    JOIN Passageiros p ON r.id_passageiro = p.id_passageiro
+    WHERE p.id_utilizador = ? 
+    ORDER BY a.data_avaliacao DESC
+");
+$stmt->bind_param("i", $id_aluno);
+$stmt->execute();
+$result = $stmt->get_result();
+while ($row = $result->fetch_assoc()) {
+    $avaliacoes_recebidas[] = $row;
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt">
@@ -169,6 +188,7 @@ while ($row = $result->fetch_assoc()) {
       <button class="active" onclick="mostrarTab('propostas')">Propostas criadas</button>
       <button onclick="mostrarTab('viagens')">Viagens efetuadas</button>
       <button onclick="mostrarTab('avaliacoes')">Avaliações enviadas</button>
+      <button onclick="mostrarTab('avaliacoes-recebidas')">Avaliações recebidas</button>
     </div>
 
     <!-- Propostas criadas -->
@@ -219,7 +239,7 @@ while ($row = $result->fetch_assoc()) {
     </div>
 
     <!-- Avaliações enviadas -->
-    <div id="avaliacoes" class="tab-content" style="display: none;">
+    <div id="avaliacoes" class="tab-content">
       <?php if (empty($avaliacoes)): ?>
         <div class="no-items">Nenhuma avaliação enviada</div>
       <?php else: ?>
@@ -230,6 +250,34 @@ while ($row = $result->fetch_assoc()) {
               <?php echo htmlspecialchars($avaliacao['destino']); ?> 
               (<?php echo date('d/m/Y', strtotime($avaliacao['data_avaliacao'])); ?>)
               - <?php echo $avaliacao['classificacao']; ?> estrelas
+            </span>
+            <div class="icons">
+              <button title="Ver detalhes" onclick="verDetalhesAvaliacao(<?php echo $avaliacao['id_avaliacao']; ?>)">
+                <i class='bx bx-info-circle'></i>
+              </button>
+            </div>
+          </div>
+        <?php endforeach; ?>
+      <?php endif; ?>
+    </div>
+
+    <!-- Avaliações recebidas -->
+    <div id="avaliacoes-recebidas" class="tab-content" style="display: none;">
+      <?php if (empty($avaliacoes_recebidas)): ?>
+        <div class="no-items">Nenhuma avaliação recebida</div>
+      <?php else: ?>
+        <?php foreach ($avaliacoes_recebidas as $avaliacao): ?>
+          <div class="item">
+            <span>
+              Avaliação de <?php echo htmlspecialchars($avaliacao['nome_avaliador']); ?>: 
+              <?php echo htmlspecialchars($avaliacao['origem']); ?> → 
+              <?php echo htmlspecialchars($avaliacao['destino']); ?> 
+              (<?php echo date('d/m/Y', strtotime($avaliacao['data_avaliacao'])); ?>)
+              - <?php echo $avaliacao['classificacao']; ?> estrelas
+              <?php if ($avaliacao['comentario']): ?>
+                <br>
+                <small>Comentário: <?php echo htmlspecialchars($avaliacao['comentario']); ?></small>
+              <?php endif; ?>
             </span>
             <div class="icons">
               <button title="Ver detalhes" onclick="verDetalhesAvaliacao(<?php echo $avaliacao['id_avaliacao']; ?>)">
