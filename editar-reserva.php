@@ -99,6 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <ul class="navbar">
         <li><a href="as-minhas-reservas.php">As minhas reservas</a></li>
         <li><a href="consultar-horarios.php">Consultar horarios</a></li>
+        <li><a href="listar-oferta.php">Minhas Ofertas</a></li>
         <li><a href="ajuda.php">Ajuda</a></li>
     </ul>
 
