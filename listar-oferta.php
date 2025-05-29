@@ -97,14 +97,19 @@ $propostas = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     .viagem strong {
       color: #c2ff22;
     }
-    .viagem button {
+    .viagem .btn-container {
       margin-top: 10px;
+      display: flex;
+      gap: 10px;
+    }
+    .viagem button {
       padding: 10px;
       background: #c2ff22;
       border: none;
       border-radius: 5px;
       font-weight: bold;
       cursor: pointer;
+      color: black;
     }
 
     .proposta-viagem {
@@ -151,19 +156,12 @@ $propostas = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
       background-color: #c2ff22;
       color: black;
       border: none;
-      margin-right: 10px;
-    }
-
-    .btn-danger {
-      background-color: #ff4444;
-      color: white;
-      border: none;
     }
   </style>
 </head>
 <body>
     <header>
-        <a href="pagina_inicial.php" class="logo">
+        <a href="pagina-inicial.php" class="logo">
           <img src="imagens/logo.png" alt="ESTransportado">
         </a>
         
@@ -208,9 +206,10 @@ $propostas = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
                                 Preço: €<?= number_format($proposta['preco'], 2) ?> | 
                                 Tipo: <?= $proposta['tipo'] === 'publico' ? 'Público' : 'Privado' ?>
                             </p>
-                            <a href="editar-proposta.php?id=<?= $proposta['id_proposta'] ?>" class="btn btn-primary">Editar</a>
-                            <a href="eliminar-proposta.php?id=<?= $proposta['id_proposta'] ?>" class="btn btn-danger" 
-                               onclick="return confirm('Tem certeza que deseja eliminar esta proposta?')">Eliminar</a>
+                            <div class="btn-container">
+                                <a href="editar-proposta.php?id=<?= $proposta['id_proposta'] ?>" class="btn btn-primary">Editar</a>
+                                <button onclick="eliminarProposta(<?= $proposta['id_proposta'] ?>)" class="btn btn-primary">Eliminar</button>
+                            </div>
                         </div>
                     <?php endforeach; ?>
                 <?php endif; ?>
@@ -247,5 +246,104 @@ $propostas = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
             </div>
         </div>
     </footer>
+
+    <script>
+    async function eliminarProposta(id_proposta) {
+        if (!id_proposta || isNaN(id_proposta)) {
+            console.error('ID de proposta inválido:', id_proposta);
+            showAlert('danger', 'ID de proposta inválido');
+            return;
+        }
+
+        if (!confirm('Tem certeza que deseja eliminar esta proposta?\nEsta ação não pode ser desfeita.')) {
+            return;
+        }
+        
+        try {
+            // Mostrar feedback visual
+            const btn = document.querySelector(`button[onclick="eliminarProposta(${id_proposta})"]`);
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Eliminando...';
+            btn.disabled = true;
+
+            // Enviar requisição
+            const response = await fetch('eliminar-proposta.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `id_proposta=${id_proposta}`
+            });
+            
+            if (!response.ok) {
+                throw new Error('Erro na requisição: ' + response.status);
+            }
+
+            const result = await response.json();
+            
+            if (!result.success) {
+                throw new Error(result.error || 'Erro ao processar a solicitação');
+            }
+
+            // Sucesso - animar remoção
+            const propostaElement = btn.closest('.viagem');
+            propostaElement.style.transition = 'all 0.3s ease';
+            propostaElement.style.opacity = '0';
+            propostaElement.style.height = '0';
+            propostaElement.style.margin = '0';
+            propostaElement.style.padding = '0';
+            propostaElement.style.overflow = 'hidden';
+            
+            setTimeout(() => {
+                propostaElement.remove();
+                
+                // Verificar se não há mais propostas
+                if (document.querySelectorAll('.viagem').length === 0) {
+                    document.querySelector('.results-section').innerHTML = `
+                        <div class="proposta-viagem">
+                            <p>Você não tem propostas ativas no momento.</p>
+                            <a href="criar-proposta.php" class="btn btn-primary">Criar Nova Proposta</a>
+                        </div>`;
+                }
+                
+                showAlert('success', result.message || 'Proposta eliminada com sucesso');
+            }, 300);
+
+        } catch (error) {
+            console.error('Erro:', error);
+            showAlert('danger', error.message);
+            
+            // Restaurar botão
+            const btn = document.querySelector(`button[onclick="eliminarProposta(${id_proposta})"]`);
+            if (btn) {
+                btn.innerHTML = 'Eliminar';
+                btn.disabled = false;
+            }
+        }
+    }
+
+    function showAlert(type, message) {
+        // Remover alertas existentes
+        const existingAlerts = document.querySelectorAll('.alert-dynamic');
+        existingAlerts.forEach(alert => alert.remove());
+
+        // Criar novo alerta
+        const alertDiv = document.createElement('div');
+        alertDiv.className = `alert alert-${type} alert-dynamic`;
+        alertDiv.style.maxWidth = '800px';
+        alertDiv.style.margin = '0 auto 20px auto';
+        alertDiv.textContent = message;
+        
+        // Inserir antes do container
+        const container = document.querySelector('.contactos');
+        container.insertBefore(alertDiv, document.querySelector('.container'));
+        
+        // Remover após 5 segundos
+        setTimeout(() => {
+            alertDiv.style.opacity = '0';
+            setTimeout(() => alertDiv.remove(), 300);
+        }, 5000);
+    }
+    </script>
 </body>
 </html>

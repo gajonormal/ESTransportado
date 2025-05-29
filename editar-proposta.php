@@ -10,7 +10,7 @@ if (!isset($_SESSION['user_id'])) {
 // Obter ID da proposta da URL
 $id_proposta = $_GET['id'] ?? null;
 if (!$id_proposta) {
-    header("Location: editar-propostas.php");
+    header("Location: as-minhas-propostas.php");
     exit();
 }
 
@@ -26,9 +26,13 @@ $stmt->execute();
 $proposta = $stmt->get_result()->fetch_assoc();
 
 if (!$proposta) {
-    header("Location: editar-propostas.php");
+    header("Location: as-minhas-propostas.php");
     exit();
 }
+
+// Inicializar variáveis de mensagem
+$success_message = '';
+$errors = [];
 
 // Processar o formulário se for submetido
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -41,8 +45,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $tipo = $_POST['tipo'] ?? 'privado';
     
     // Validações
-    $errors = [];
-    
     if (empty($origem)) $errors[] = "A origem não pode estar vazia.";
     if (empty($destino)) $errors[] = "O destino não pode estar vazio.";
     if (empty($data)) $errors[] = "A data não pode estar vazia.";
@@ -64,9 +66,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                           $lotacao_maxima, $preco, $tipo, $id_proposta);
         
         if ($stmt->execute()) {
-            $_SESSION['success_message'] = "Proposta atualizada com sucesso!";
-            header("Location: as-minhas-propostas.php");
-            exit();
+            $success_message = "Proposta atualizada com sucesso!";
+            
+            // Atualizar os dados locais para mostrar as alterações
+            $proposta['origem'] = $origem;
+            $proposta['destino'] = $destino;
+            $proposta['data'] = $data;
+            $proposta['hora'] = $hora;
+            $proposta['lotacao_maxima'] = $lotacao_maxima;
+            $proposta['preco'] = $preco;
+            $proposta['tipo'] = $tipo;
         } else {
             $errors[] = "Erro ao atualizar a proposta. Por favor, tente novamente.";
         }
@@ -91,6 +100,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
 
   <style>
+    body {
+      background-color: #000;
+      color: #fff;
+      font-family: 'Arial', sans-serif;
+    }
+    
     .wrapper {
       display: flex;
       flex-direction: column;
@@ -107,16 +122,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       max-width: 600px;
       width: 100%;
       text-align: center;
+      box-shadow: 0 0 20px rgba(194, 255, 34, 0.1);
     }
 
     .proposta-container h2 {
       color: #c2ff22;
       margin-bottom: 10px;
+      font-size: 1.8rem;
     }
 
     .proposta-container p {
       margin-bottom: 30px;
       color: #ccc;
+      font-size: 1rem;
     }
 
     .form-group {
@@ -129,16 +147,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       margin-bottom: 8px;
       color: #c2ff22;
       font-weight: 500;
+      font-size: 0.9rem;
     }
 
     .form-group input,
     .form-group select {
       width: 100%;
-      padding: 10px;
+      padding: 12px;
       border: none;
       border-radius: 8px;
       background-color: #2a2a2a;
       color: white;
+      font-size: 1rem;
+      transition: all 0.3s;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px #c2ff22;
     }
 
     .form-group input::placeholder {
@@ -155,6 +182,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       cursor: pointer;
       margin-top: 10px;
       transition: background-color 0.3s;
+      font-size: 1rem;
+      width: 100%;
     }
 
     .btn-enviar:hover {
@@ -166,6 +195,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       gap: 10px;
       margin-bottom: 20px;
     }
+    
     .trip-type button {
       flex: 1;
       padding: 10px;
@@ -174,7 +204,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       background: #333;
       color: white;
       border-radius: 5px;
+      transition: all 0.3s;
     }
+    
     .trip-type button.active {
       background: #c2ff22;
       color: black;
@@ -184,14 +216,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       margin-bottom: 20px;
       padding: 15px;
       border-radius: 8px;
+      font-size: 0.9rem;
     }
+    
     .alert-danger {
       background-color: #ff4444;
       color: white;
     }
+    
     .alert-success {
       background-color: #00C851;
       color: white;
+    }
+    
+    .btn-voltar {
+      display: inline-block;
+      margin-top: 15px;
+      color: #c2ff22;
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+    
+    .btn-voltar:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
@@ -199,7 +246,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
 
   <header>
-    <a href="pagina_inicial.php" class="logo">
+    <a href="pagina-inicial.php" class="logo">
       <img src="imagens/logo.png" alt="ESTransportado">
     </a>
   </header>
@@ -209,9 +256,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <h2>Editar Proposta de Transporte</h2>
       <p>Atualize os detalhes da sua proposta de transporte</p>
       
-      <?php if (isset($_SESSION['success_message'])): ?>
-        <div class="alert alert-success"><?= htmlspecialchars($_SESSION['success_message']) ?></div>
-        <?php unset($_SESSION['success_message']); ?>
+      <?php if (!empty($success_message)): ?>
+        <div class="alert alert-success"><?= htmlspecialchars($success_message) ?></div>
       <?php endif; ?>
       
       <?php if (!empty($errors)): ?>
@@ -222,7 +268,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
       <?php endif; ?>
       
-      <form method="POST">
+      <form method="POST" id="editarPropostaForm">
         <div class="form-group">
           <label for="origem">De</label>
           <input type="text" id="origem" name="origem" 
@@ -273,7 +319,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
 
         <button type="submit" class="btn-enviar">Guardar Alterações</button>
-        <a href="pagina-inicial.php" class="btn-enviar" style="background-color: #666; margin-left: 10px;">Cancelar</a>
+        <a href="listar-oferta.php" class="btn-voltar">← Voltar às minhas propostas</a>
       </form>
     </div>
   </div>
@@ -308,10 +354,48 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   </footer>
 
   <script>
-    // Script para melhorar a experiência do usuário
     document.addEventListener('DOMContentLoaded', function() {
-      // Converter campos de data/hora para formatos mais amigáveis se necessário
-      // Pode adicionar mais interações conforme necessário
+      const form = document.getElementById('editarPropostaForm');
+      
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Mostrar feedback visual de carregamento
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = 'A guardar...';
+        submitBtn.disabled = true;
+        
+        // Enviar dados via Fetch API
+        fetch(window.location.href, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+          }
+        })
+        .then(response => response.text())
+        .then(html => {
+          // Criar um elemento temporário para parsear o HTML
+          const tempDiv = document.createElement('div');
+          tempDiv.innerHTML = html;
+          
+          // Atualizar apenas o conteúdo do container
+          const newContent = tempDiv.querySelector('.proposta-container').innerHTML;
+          document.querySelector('.proposta-container').innerHTML = newContent;
+          
+          // Reaplicar o event listener ao novo formulário
+          document.getElementById('editarPropostaForm').addEventListener('submit', arguments.callee);
+        })
+        .catch(error => {
+          console.error('Erro:', error);
+          alert('Ocorreu um erro ao atualizar a proposta. Por favor, tente novamente.');
+        })
+        .finally(() => {
+          submitBtn.textContent = originalText;
+          submitBtn.disabled = false;
+        });
+      });
     });
   </script>
 </body>
