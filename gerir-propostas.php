@@ -16,6 +16,7 @@ $mysqli->set_charset('utf8mb4');
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
     $id      = (int)$_POST['id_proposta'];
+
     if ($action === 'accept') {
         $stmt = $mysqli->prepare("UPDATE PropostasTransporte SET estado = 'completo' WHERE id_proposta = ?");
         $stmt->bind_param('i', $id);
@@ -23,13 +24,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->close();
     }
     elseif ($action === 'refuse') {
-        // recusar = eliminar da tabela
-        $stmt = $mysqli->prepare("DELETE FROM PropostasTransporte WHERE id_proposta = ?");
+        // 1) recolhemos o motivo
+        $motivo = trim($_POST['motivo'] ?? '');
+
+        // 2) marcamos a proposta como cancelada
+        $stmt = $mysqli->prepare("
+            UPDATE PropostasTransporte
+            SET estado = 'cancelado'
+            WHERE id_proposta = ?
+        ");
         $stmt->bind_param('i', $id);
         $stmt->execute();
         $stmt->close();
+
+        // 3) buscamos o id_aluno para só notificar esse
+        $stmt = $mysqli->prepare("SELECT id_aluno FROM PropostasTransporte WHERE id_proposta = ?");
+        $stmt->bind_param('i', $id);
+        $stmt->execute();
+        $stmt->bind_result($id_aluno);
+        $stmt->fetch();
+        $stmt->close();
+
+        // 4) inserimos a notificação para esse aluno, incluindo o motivo
+        $stmt = $mysqli->prepare("
+            INSERT INTO Notificacoes (id_utilizador, titulo, mensagem, tipo)
+            VALUES (?, 'Proposta cancelada', ?, 'alerta')
+        ");
+        $mensagem = "A sua proposta #{$id} foi recusada. Motivo: {$motivo}";
+        $stmt->bind_param('is', $id_aluno, $mensagem);
+        $stmt->execute();
+        $stmt->close();
     }
-    header('Location: gerir-propostas.php'); exit();
+
+    header('Location: gerir-propostas.php');
+    exit();
 }
 
 // Filtros por origem e destino
@@ -107,23 +135,18 @@ $result = $stmt->get_result();
     </a>
 
     <ul class="navbar">
-      <li><a href="gerir-viagens.php"> Gerir  Viagens </a></li>
-      <li><a href="gerir-reservas.php">Gerir Reservas</a></li>
-      <li><a href="gerir-propostas.php">Gerir Propostas</a></li>
-     
-      
-    
-
-      
-      
-      </div>
-
+      <li><a href="gerir-viagens.php"> Gerir Viagens </a></li>
+      <li><a href="gerir-reservas.php"> Gerir Reservas </a></li>
+      <li><a href="gerir-propostas.php"> Gerir Propostas </a></li>
+    </ul>
 
     <a href="perfil.php" class="btn btn-primary" id="btn-entrar">Perfil</a>
   </header>
+
   <div class="main-container">
     <h1>Gerir Propostas de Transporte</h1>
     <div class="tab-container">
+
       <form method="get" class="form-section">
         <div class="form-group">
           <label>Origem</label>
@@ -141,17 +164,15 @@ $result = $stmt->get_result();
       <?php else: ?>
         <?php while ($p = $result->fetch_assoc()): ?>
           <div class="card-viagem">
-            <h5>
-              <?=htmlspecialchars($p['origem'])?> → <?=htmlspecialchars($p['destino'])?>
-            </h5>
-            <p><i class='bx bx-calendar'></i>
-              <?=date('d/m/Y H:i', strtotime($p['data_partida']))?>
-            </p>
-            <p><i class='bx bx-money'></i> €<?=number_format($p['preco'],2,',','.')?> |
-               <i class='bx bx-group'></i> <?=$p['lotacao_maxima']?> lugares |
-               <i class='bx bx-car'></i> <?=ucfirst($p['tipo'])?>
+            <h5><?=htmlspecialchars($p['origem'])?> → <?=htmlspecialchars($p['destino'])?></h5>
+            <p><i class='bx bx-calendar'></i> <?=date('d/m/Y H:i', strtotime($p['data_partida']))?></p>
+            <p>
+              <i class='bx bx-money'></i> €<?=number_format($p['preco'],2,',','.')?> |
+              <i class='bx bx-group'></i> <?=$p['lotacao_maxima']?> lugares |
+              <i class='bx bx-car'></i> <?=ucfirst($p['tipo'])?>
             </p>
             <div class="d-flex gap-2">
+              <!-- Aceitar -->
               <form method="post" class="m-0 flex-fill">
                 <input type="hidden" name="action" value="accept">
                 <input type="hidden" name="id_proposta" value="<?=$p['id_proposta']?>">
@@ -159,10 +180,11 @@ $result = $stmt->get_result();
                   <i class='bx bx-check'></i>
                 </button>
               </form>
-              <form method="post" class="m-0 flex-fill">
+              <!-- Recusar com prompt de motivo -->
+              <form method="post" class="m-0 flex-fill" onsubmit="return handleRefuse(this);">
                 <input type="hidden" name="action" value="refuse">
                 <input type="hidden" name="id_proposta" value="<?=$p['id_proposta']?>">
-                <button class="btn-action btn-danger w-100" onclick="return confirm('Recusar esta proposta?');">
+                <button class="btn-action btn-danger w-100">
                   <i class='bx bx-x'></i>
                 </button>
               </form>
@@ -170,8 +192,25 @@ $result = $stmt->get_result();
           </div>
         <?php endwhile; ?>
       <?php endif; ?>
+
     </div>
   </div>
 
+  <script>
+    function handleRefuse(form) {
+      var motivo = prompt('Por favor, insira o motivo da recusa:');
+      if (motivo === null || motivo.trim() === '') {
+        alert('Recusa cancelada: é necessário informar o motivo.');
+        return false;
+      }
+      var inp = document.createElement('input');
+      inp.type = 'hidden';
+      inp.name = 'motivo';
+      inp.value = motivo.trim();
+      form.appendChild(inp);
+      return confirm('Confirmar recusa desta proposta?');
+    }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
