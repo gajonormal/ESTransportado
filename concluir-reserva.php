@@ -269,6 +269,8 @@ if ($viagem['lotacao_atual'] >= $viagem['lotacao_maxima']) {
                              PayPal
                         </label>
                     </div>
+                    <button type="submit" class="btn-pagar">Pagar Agora</button>
+                </form>
             </div>
         </div>
         <div class="container">
@@ -286,7 +288,6 @@ if ($viagem['lotacao_atual'] >= $viagem['lotacao_maxima']) {
                 <h5>Preço</h5>
                 <p>Total: €<?php echo number_format($viagem['preco'], 2); ?></p>
             </div>
-            <button type="submit" class="btn-pagar">Pagar Agora</button>
         </div>
     </div>
 
