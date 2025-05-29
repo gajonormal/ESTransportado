@@ -310,6 +310,7 @@ if ($viagem['lotacao_atual'] >= $viagem['lotacao_maxima']) {
                 <h5>Pagamento</h5>
                 <form action="" method="POST">
                     <input type="hidden" name="id_viagem" value="<?php echo htmlspecialchars($id_viagem); ?>">
+                    <input type="hidden" name="lugar" id="lugarSelecionado" value="">
                     <div class="metodo-pagamento">
                         <input type="radio" id="mbway" name="pagamento" value="MB Way" required>
                         <label for="mbway">
@@ -333,6 +334,8 @@ if ($viagem['lotacao_atual'] >= $viagem['lotacao_maxima']) {
                              PayPal
                         </label>
                     </div>
+                    <button type="submit" class="btn-pagar" id="btnPagar" disabled>Pagar Agora</button>
+                </form>
             </div>
         </div>
         <div class="container">
@@ -350,14 +353,33 @@ if ($viagem['lotacao_atual'] >= $viagem['lotacao_maxima']) {
                 <h5>Preço</h5>
                 <p>Total: €<?php echo number_format($viagem['preco'], 2); ?></p>
             </div>
-            <button type="submit" class="btn-pagar">Pagar Agora</button>
         </div>
     </div>
 
     <script>
+    // Função para verificar se um lugar foi selecionado
+    function verificarLugarSelecionado() {
+        const lugar = document.getElementById('lugarSelecionado').value;
+        const btnPagar = document.getElementById('btnPagar');
+        btnPagar.disabled = !lugar;
+    }
+
+    // Verificar lugar selecionado quando a página carregar
+    window.onload = function() {
+        verificarLugarSelecionado();
+    }
+
+    // Função para escolher lugar
     function escolherLugar() {
-        // Implementar lógica para escolher lugar
         window.location.href = 'escolher-lugar.php?id_viagem=<?php echo htmlspecialchars($id_viagem); ?>';
+    }
+
+    // Verificar se há um lugar selecionado na URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const lugarSelecionado = urlParams.get('lugar');
+    if (lugarSelecionado) {
+        document.getElementById('lugarSelecionado').value = lugarSelecionado;
+        verificarLugarSelecionado();
     }
     </script>
 
