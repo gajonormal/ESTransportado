@@ -98,7 +98,7 @@ if ($result) {
       </a>
 
       <ul class="navbar">
-        <li><a href="as-minhas-reservas.html">As minhas reservas</a></li>
+        <li><a href="as-minhas-reservas.php">As minhas reservas</a></li>
         <li><a href="consultar-horarios.php">Consultar horarios</a></li>
       
 
