@@ -68,6 +68,7 @@ if ($viagem['lotacao_atual'] >= $viagem['lotacao_maxima']) {
     <ul class="navbar">
         <li><a href="as-minhas-reservas.php">As minhas reservas</a></li>
         <li><a href="consultar-horarios.php">Consultar horarios</a></li>
+        <li><a href="listar-oferta.php">Minhas Ofertas</a></li>
         <li><a href="ajuda.php">Ajuda</a></li>
     </ul>
 
