@@ -109,7 +109,7 @@ $reservas = $result->fetch_all(MYSQLI_ASSOC);
 </head>
 <body>
   <header>
-    <a href="pagina-inicial.php" class="logo">
+    <a href="pagina-aluno.php" class="logo">
       <img src="imagens/logo.png" alt="ESTransportado">
     </a>
   </header>
