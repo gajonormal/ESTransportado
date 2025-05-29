@@ -152,6 +152,7 @@ $viagens = mysqli_fetch_all($result, MYSQLI_ASSOC);
       <li><a href="ajuda.php">Ajuda</a></li>
     </ul>
     
+    
     <a href="perfil.php" class="btn btn-primary" id="btn-entrar">Perfil</a>
 </header>
   <div class="container">
@@ -216,7 +217,7 @@ $viagens = mysqli_fetch_all($result, MYSQLI_ASSOC);
               Vagas disponíveis: <?php echo $vagas_disponiveis; ?>/<?php echo $viagem['lotacao_maxima']; ?>
             </p>
             
-            <form method="POST" action="concluir-reserva.html">
+            <form method="POST" action="concluir-reserva.php?id_viagem=<?= $viagem['id_viagem'] ?>">
               <input type="hidden" name="id_viagem" value="<?php echo $viagem['id_viagem']; ?>">
               <button type="submit" class="btn-reservar" <?php echo $vagas_disponiveis <= 0 ? 'disabled' : ''; ?>>
                 <?php echo $vagas_disponiveis <= 0 ? 'LOTADO' : 'RESERVAR'; ?>
