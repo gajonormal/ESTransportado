@@ -93,23 +93,75 @@ if ($result) {
 
 <body>
     <header>
-      <a href="pagina-aluno.php" class="logo">
+    <a href="pagina-aluno.php" class="logo">
         <img src="imagens/logo.png" alt="ESTransportado">
-      </a>
+    </a>
 
-      <ul class="navbar">
+    <ul class="navbar">
         <li><a href="as-minhas-reservas.php">As minhas reservas</a></li>
         <li><a href="consultar-horarios.php">Consultar horarios</a></li>
-        <li><a href="listar-oferta.php">Listar oferta</a></li>
       
 
         <li><a href="ajuda.php">Ajuda</a></li>
+    </ul>
+
+    <!-- Botão de Notificações com contador -->
+    <a href="notificacoes.php" class="notification-button">
+        <i class="bell-icon">🔔</i>
+        <span id="notification-count" class="notification-count">0</span>
+    </a>
+
+    <a href="perfil.php" class="btn btn-primary" id="btn-entrar">Perfil</a>
+
+    <style>
+    /* Estilo para o botão de notificações */
+    .notification-button {
+        position: relative;
+        display: inline-block;
+        padding: 8px 12px;
+        margin-right: 15px;
+        color: #333;
+        text-decoration: none;
+        font-size: 1.2em;
+    }
+
+    .notification-count {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background-color: red;
+        color: white;
+        border-radius: 50%;
+        padding: 2px 6px;
+        font-size: 12px;
+        display: none;
+    }
+    </style>
+
+    <script>
+    // Função para carregar o contador de notificações não lidas
+    function loadNotificationCount() {
+        fetch('get_notification_count.php')
+            .then(response => response.json())
+            .then(data => {
+                const notificationCount = document.getElementById('notification-count');
+                if (data.count > 0) {
+                    notificationCount.textContent = data.count;
+                    notificationCount.style.display = 'block';
+                } else {
+                    notificationCount.style.display = 'none';
+                }
+            });
+    }
+
+    // Carregar contador quando a página é carregada
+    document.addEventListener('DOMContentLoaded', function() {
+        loadNotificationCount();
         
-        </div>
-
-      
-
-      <a href="perfil.php" class="btn btn-primary" id="btn-entrar">Perfil</a>
+        // Atualizar contador periodicamente (a cada 30 segundos)
+        setInterval(loadNotificationCount, 30000);
+    });
+    </script>
     </header>
 
 

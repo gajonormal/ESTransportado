@@ -62,9 +62,73 @@ if ($viagem['lotacao_atual'] >= $viagem['lotacao_maxima']) {
 <body>
   <header>
     <a href="pagina-aluno.php" class="logo">
-      <img src="imagens/logo.png" alt="ESTransportado">
+        <img src="imagens/logo.png" alt="ESTransportado">
     </a>
-  </header>
+
+    <ul class="navbar">
+        <li><a href="as-minhas-reservas.php">As minhas reservas</a></li>
+        <li><a href="consultar-horarios.php">Consultar horarios</a></li>
+        <li><a href="ajuda.php">Ajuda</a></li>
+    </ul>
+
+    <!-- Botão de Notificações com contador -->
+    <a href="notificacoes.php" class="notification-button">
+        <i class="bell-icon">🔔</i>
+        <span id="notification-count" class="notification-count">0</span>
+    </a>
+
+    <a href="perfil.php" class="btn btn-primary" id="btn-entrar">Perfil</a>
+
+    <style>
+    /* Estilo para o botão de notificações */
+    .notification-button {
+        position: relative;
+        display: inline-block;
+        padding: 8px 12px;
+        margin-right: 15px;
+        color: #333;
+        text-decoration: none;
+        font-size: 1.2em;
+    }
+
+    .notification-count {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background-color: red;
+        color: white;
+        border-radius: 50%;
+        padding: 2px 6px;
+        font-size: 12px;
+        display: none;
+    }
+    </style>
+
+    <script>
+    // Função para carregar o contador de notificações não lidas
+    function loadNotificationCount() {
+        fetch('get_notification_count.php')
+            .then(response => response.json())
+            .then(data => {
+                const notificationCount = document.getElementById('notification-count');
+                if (data.count > 0) {
+                    notificationCount.textContent = data.count;
+                    notificationCount.style.display = 'block';
+                } else {
+                    notificationCount.style.display = 'none';
+                }
+            });
+    }
+
+    // Carregar contador quando a página é carregada
+    document.addEventListener('DOMContentLoaded', function() {
+        loadNotificationCount();
+        
+        // Atualizar contador periodicamente (a cada 30 segundos)
+        setInterval(loadNotificationCount, 30000);
+    });
+    </script>
+    </header>
 
   <style>
    
@@ -244,8 +308,9 @@ if ($viagem['lotacao_atual'] >= $viagem['lotacao_maxima']) {
             </div>
             <div class="box">
                 <h5>Pagamento</h5>
-                <form action="processar-pagamento.php" method="POST">
+                <form action="" method="POST">
                     <input type="hidden" name="id_viagem" value="<?php echo htmlspecialchars($id_viagem); ?>">
+                    <input type="hidden" name="lugar" id="lugarSelecionado" value="">
                     <div class="metodo-pagamento">
                         <input type="radio" id="mbway" name="pagamento" value="MB Way" required>
                         <label for="mbway">
@@ -269,6 +334,8 @@ if ($viagem['lotacao_atual'] >= $viagem['lotacao_maxima']) {
                              PayPal
                         </label>
                     </div>
+                    <button type="submit" class="btn-pagar" id="btnPagar" disabled>Pagar Agora</button>
+                </form>
             </div>
         </div>
         <div class="container">
@@ -286,14 +353,33 @@ if ($viagem['lotacao_atual'] >= $viagem['lotacao_maxima']) {
                 <h5>Preço</h5>
                 <p>Total: €<?php echo number_format($viagem['preco'], 2); ?></p>
             </div>
-            <button type="submit" class="btn-pagar">Pagar Agora</button>
         </div>
     </div>
 
     <script>
+    // Função para verificar se um lugar foi selecionado
+    function verificarLugarSelecionado() {
+        const lugar = document.getElementById('lugarSelecionado').value;
+        const btnPagar = document.getElementById('btnPagar');
+        btnPagar.disabled = !lugar;
+    }
+
+    // Verificar lugar selecionado quando a página carregar
+    window.onload = function() {
+        verificarLugarSelecionado();
+    }
+
+    // Função para escolher lugar
     function escolherLugar() {
-        // Implementar lógica para escolher lugar
         window.location.href = 'escolher-lugar.php?id_viagem=<?php echo htmlspecialchars($id_viagem); ?>';
+    }
+
+    // Verificar se há um lugar selecionado na URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const lugarSelecionado = urlParams.get('lugar');
+    if (lugarSelecionado) {
+        document.getElementById('lugarSelecionado').value = lugarSelecionado;
+        verificarLugarSelecionado();
     }
     </script>
 
