@@ -6,7 +6,6 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'aluno') {
     header("Location: pagina-login.php");
     exit();
 }
-
 // Incluir conexão com o banco de dados
 require_once 'basedados/basedados.h';
 
@@ -284,7 +283,7 @@ if ($result && mysqli_num_rows($result) > 0) {
                         </div>
                         
                         <div class="action-buttons">
-                            <a href="reservar-viagem.php?id=<?= $viagem['id_viagem'] ?>" class="btn-reservar">
+                            <a href="concluir-reserva.php?id_viagem=<?= $viagem['id_viagem'] ?>" class="btn-reservar">
                                 <i class='bx bx-check-circle'></i> Reservar
                             </a>
                         </div>

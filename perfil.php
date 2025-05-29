@@ -118,7 +118,7 @@ $data_nascimento_formatada = !empty($user['data_nascimento']) ? date('Y-m-d', st
     
         <ul class="navbar">
           <?php if ($_SESSION['user_type'] === 'aluno'): ?>
-            <li><a href="historico-aluno.html">Histórico</a></li>
+            <li><a href="historico-aluno.php">Histórico</a></li>
           <?php endif; ?>
         </ul>
     
