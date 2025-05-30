@@ -38,6 +38,7 @@ require_once 'basedados/basedados.h';
       <li><a href="gerir-registos.php">Gerir registos</a></li>
       <li><a href="gerir-utilizadores.php">Gerir Utilizadores</a></li>
       <li><a href="gerir-avaliacoes.php">Gerir avaliações</a></li>
+      <li><a href="logs.php">Logs detalhados</a></li>
       <li><a href="ajuda.php">Ajuda</a></li>
     </ul>
 
@@ -311,7 +312,7 @@ document.addEventListener('DOMContentLoaded', function() {
           <div class="detail-box">
             <h3>Transportes públicos</h3>
             <p>Texto de exemplo sobre transporte público.</p>
-            <a href="ler_mais.html" class="btn btn-primary" id="btn-lermais">Ler mais</a>
+            <a href="ler_mais.php" class="btn btn-primary" id="btn-lermais">Ler mais</a>
           </div>
         </div>
       </div>
@@ -324,7 +325,7 @@ document.addEventListener('DOMContentLoaded', function() {
           <div class="detail-box">
             <h3>Transportes privados</h3>
             <p>Texto de exemplo sobre transporte privado.</p>
-            <a href="ler_mais.html" class="btn btn-primary" id="btn-lermais">Ler mais</a>
+            <a href="ler_mais.php" class="btn btn-primary" id="btn-lermais">Ler mais</a>
           </div>
         </div>
       </div>
@@ -349,7 +350,7 @@ document.addEventListener('DOMContentLoaded', function() {
             are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in
             the middle of text. All
           </p>
-          <a href="ler_mais.html" class="btn btn-primary" id="btn-lermais">Ler mais</a>
+          <a href="ler_mais.php" class="btn btn-primary" id="btn-lermais">Ler mais</a>
         </div>
       </div>
       <div class="col-md-6">
