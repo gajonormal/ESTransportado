@@ -16,7 +16,7 @@
 </head>
 <body>
     <header>
-        <a href="pagina-admin.html" class="logo">
+        <a href="pagina-admin.php" class="logo">
           <img src="imagens/logo.png" alt="ESTransportado">
         </a>
       </header>

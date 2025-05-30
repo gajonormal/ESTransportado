@@ -209,6 +209,7 @@ if ($result && mysqli_num_rows($result) > 0) {
             padding: 40px;
             border-radius: 15px;
             text-align: center;
+            margin-bottom: 25px;
         }
         
         .no-resultados h3 {
@@ -223,7 +224,57 @@ if ($result && mysqli_num_rows($result) > 0) {
             border-radius: 10px;
             padding: 12px 25px;
             font-weight: bold;
-            margin-top: 20px;
+            margin: 10px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .no-resultados .btn-primary:hover {
+            background-color: #a8e01e;
+        }
+        
+        /* Proposta de Viagem */
+        .proposta-viagem {
+            background: linear-gradient(135deg, #333, #444);
+            border: 2px solid #c2ff22;
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+            text-align: center;
+            color: white;
+        }
+        
+        .proposta-viagem h3 {
+            color: #c2ff22;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+        
+        .proposta-viagem p {
+            margin-bottom: 20px;
+            color: #ccc;
+            font-size: 1.1em;
+        }
+        
+        .btn-proposta {
+            background: linear-gradient(135deg, #c2ff22, #a8e01e);
+            color: #333;
+            border: none;
+            border-radius: 12px;
+            padding: 15px 30px;
+            font-weight: bold;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 4px 15px rgba(194, 255, 34, 0.3);
+        }
+        
+        .btn-proposta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(194, 255, 34, 0.4);
+            color: #333;
         }
         
         .pesquisa-info {
@@ -236,6 +287,17 @@ if ($result && mysqli_num_rows($result) > 0) {
         
         .pesquisa-info strong {
             color: #c2ff22;
+        }
+        
+        .divider {
+            border-top: 2px solid #444;
+            margin: 30px 0;
+        }
+        
+        .icon-highlight {
+            color: #c2ff22;
+            font-size: 1.5em;
+            margin-right: 10px;
         }
     </style>
 </head>
@@ -254,8 +316,12 @@ if ($result && mysqli_num_rows($result) > 0) {
             <div class="pesquisa-info">
                 <p>
                     <span><i class='bx bx-map-pin'></i> De <strong><?php echo htmlspecialchars($origem); ?></strong> para <strong><?php echo htmlspecialchars($destino); ?></strong></span>
-                    <span class="ms-4"><i class='bx bx-calendar'></i> Data: <strong><?php echo date('d/m/Y', strtotime($data_viagem)); ?></strong></span>
-                    <span class="ms-4"><i class='bx bx-bus'></i> Tipo: <strong><?php echo ($tipo_transporte == 'publica' ? 'Pública' : 'Privada'); ?></strong></span>
+                    <?php if (!empty($data_viagem)): ?>
+                        <span class="ms-4"><i class='bx bx-calendar'></i> Data: <strong><?php echo date('d/m/Y', strtotime($data_viagem)); ?></strong></span>
+                    <?php endif; ?>
+                    <?php if (!empty($tipo_transporte)): ?>
+                        <span class="ms-4"><i class='bx bx-bus'></i> Tipo: <strong><?php echo ($tipo_transporte == 'publica' ? 'Pública' : 'Privada'); ?></strong></span>
+                    <?php endif; ?>
                 </p>
             </div>
             
@@ -289,16 +355,36 @@ if ($result && mysqli_num_rows($result) > 0) {
                         </div>
                     </div>
                 <?php endforeach; ?>
+                
+                <!-- Divider -->
+                <div class="divider"></div>
+                
             <?php else: ?>
                 <div class="no-resultados">
-                    <h3>Nenhuma viagem encontrada</h3>
+                    <h3><i class='bx bx-search-alt-2'></i> Nenhuma viagem encontrada</h3>
                     <p>Não foram encontradas viagens disponíveis com os critérios selecionados.</p>
-                    <p>Tente alterar os filtros da sua pesquisa ou escolher outra data.</p>
-                    <a href="pagina-aluno.php" class="btn btn-primary">
-                        <i class='bx bx-arrow-back'></i> Voltar à pesquisa
-                    </a>
+                    <p>Pode tentar alterar os filtros da sua pesquisa, escolher outra data ou criar uma proposta de viagem.</p>
+                    <div>
+                        <a href="pagina-aluno.php" class="btn btn-primary">
+                            <i class='bx bx-arrow-back'></i> Voltar à pesquisa
+                        </a>
+                    </div>
                 </div>
             <?php endif; ?>
+            
+            <!-- Proposta de Viagem - Sempre visível -->
+            <div class="proposta-viagem">
+                <h3><i class='bx bx-bulb icon-highlight'></i>Não encontraste o que procuravas?</h3>
+                <p>Cria uma proposta de viagem personalizada e espera que esta seja aceite pelo gestor! 
+                   Se houver interesse nesta, a viagem poderá ser organizada.</p>
+                <a href="criar-proposta.php?origem=<?= urlencode($origem) ?>&destino=<?= urlencode($destino) ?>&data=<?= urlencode($data_viagem) ?>&tipo=<?= urlencode($tipo_transporte) ?>" 
+                   class="btn-proposta">
+                    <i class='bx bx-plus-circle'></i> Criar Proposta de Viagem
+                </a>
+                <div style="margin-top: 15px; font-size: 0.9em; color: #aaa;">
+                    <i class='bx bx-info-circle'></i> A sua proposta será analisada e, se viável, poderá tornar-se numa viagem oficial
+                </div>
+            </div>
         </div>
     </div>
 
