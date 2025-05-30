@@ -375,7 +375,7 @@ function eliminarProposta(id) {
 }
 
 function verDetalhesViagem(id) {
-  window.location.href = `detalhes-viagem.php?id=${id}`;
+  window.location.href = ``;
 }
 
 function verDetalhesAvaliacao(id) {
