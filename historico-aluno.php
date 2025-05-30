@@ -288,6 +288,9 @@ while ($row = $result->fetch_assoc()) {
               <button title="Detalhes" onclick="verDetalhesViagem(<?php echo $viagem['id_viagem']; ?>)">
                 <i class='bx bx-info-circle'></i>
               </button>
+              <button title="Avaliar" onclick="avaliarViagem(<?php echo $viagem['id_viagem']; ?>)">
+                <i class='bx bx-star'></i>
+              </button>
             </div>
           </div>
         <?php endforeach; ?>
@@ -380,6 +383,10 @@ function verDetalhesViagem(id) {
 
 function verDetalhesAvaliacao(id) {
   window.location.href = `detalhes-avaliacao.php?id=${id}`;
+}
+
+function avaliarViagem(id) {
+  window.location.href = `avaliar-viagem.php?id_viagem=${id}`;
 }
 </script>
 
