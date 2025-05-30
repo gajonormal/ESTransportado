@@ -25,6 +25,12 @@ $stmt->execute();
 $result = $stmt->get_result();
 $viagem = $result->fetch_assoc();
 
+// Buscar um condutor específico
+$stmt = $conn->prepare("SELECT * FROM Condutores WHERE id_condutor = 1");
+$stmt->execute();
+$result = $stmt->get_result();
+$condutor = $result->fetch_assoc();
+
 // Se a viagem não existir, redirecionar
 if (!$viagem) {
     header("Location: pagina_inicial.php");
@@ -348,7 +354,11 @@ if ($viagem['lotacao_atual'] >= $viagem['lotacao_maxima']) {
             </div>
             <div class="box">
                 <h5>Condutor</h5>
-                <p>Informações do condutor serão disponibilizadas em breve</p>
+                <div class="condutor-info">
+                    <p><strong>Nome:</strong> <?php echo htmlspecialchars($condutor['nome_condutor']); ?></p>
+                    <p><strong>Classificação:</strong> ⭐⭐⭐⭐⭐ (<?php echo number_format($condutor['media_avaliacoes'], 1); ?>)</p>
+                    <p><strong>Total de Avaliações:</strong> <?php echo $condutor['total_avaliacoes']; ?></p>
+                </div>
             </div>
             <div class="box">
                 <h5>Preço</h5>
